@@ -34,7 +34,10 @@ html {
   margin: 0;
   padding: 0;
 }
-
+.w {
+  width: 1000px;
+  margin: 0 auto;
+}
 ul,
 li,
 ol {
