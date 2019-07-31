@@ -12,7 +12,29 @@
           <nuxt-link to="/air">国内机票</nuxt-link>
         </el-row>
         <div class="login">
-          <nuxt-link to="/user/login">登陆/注册</nuxt-link>
+          <!-- 用户信息不存在，显示登录/注册 -->
+          <nuxt-link to="/user/login" v-if="!$store.state.user.userInfo.token">登陆/注册</nuxt-link>
+
+          <!-- 如果用户存在则展示用户信息，用户数据来自登录页面 -->
+          <el-dropdown v-else>
+            <el-row type="flex" align="middle">
+              <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" alt />
+              <span class="el-dropdown-link">
+                {{$store.state.user.userInfo.user.nickname}}
+                <i
+                  class="el-icon-arrow-down el-icon--right"
+                ></i>
+              </span>
+            </el-row>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>
+                <nuxt-link to="/">个人中心</nuxt-link>
+              </el-dropdown-item>
+              <el-dropdown-item @click.native="handleExit">
+                <nuxt-link to>退出</nuxt-link>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </el-row>
     </div>
@@ -21,7 +43,20 @@
 
 <script>
 export default {
+  data() {
+    return {
 
+    }
+  },
+  methods: {
+    //  点击退出按钮
+    handleExit() {
+      //页面跳转到首页
+      this.$router.push('/')
+      // 清空user的数据信息
+      this.$store.commit('user/clearUserInfo')
+    }
+  }
 }
 </script>
 
@@ -73,6 +108,13 @@ export default {
         border-bottom: 1px solid #409eff;
         color: #409eff;
       }
+    }
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
     }
   }
 }
