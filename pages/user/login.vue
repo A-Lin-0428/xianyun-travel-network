@@ -11,16 +11,19 @@
         >{{item}}</span>
       </el-row>
       <!-- 登录的组件 -->
-      <LoginForm />>
+      <LoginForm v-if="current==0" />
       <!-- 注册的组件 -->
+      <RegisterForm v-if="current==1" />
     </div>
   </el-row>
 </template>
 <script>
 import LoginForm from '@/components/user/loginForm'
+import RegisterForm from '@/components/user/registerForm'
 export default {
   components: {
-    LoginForm
+    LoginForm,
+    RegisterForm
   },
   data() {
     return {
