@@ -51,7 +51,15 @@
     </h2>
     <!-- 特价机票内容部分 -->
     <div class="specialTicket">
-      <el-row type="flex" justify="space-between"></el-row>
+      <el-row type="flex" justify="space-around">
+        <nuxt-link to="#" v-for="(item,index) in recomendAir" :key="index">
+          <img :src="item.cover" alt />
+          <el-row type="flex" justify="space-between" class="bgSpace">
+            <span>{{item.departCity}}-{{item.destCity}}</span>
+            <span>{{item.price}}</span>
+          </el-row>
+        </nuxt-link>
+      </el-row>
     </div>
   </div>
 </template>
@@ -65,7 +73,8 @@ export default {
   },
   data() {
     return {
-      current: 0
+      current: 0,
+      recomendAir: []
     }
   },
   methods: {
@@ -74,6 +83,15 @@ export default {
       // console.log(index)
       this.current = index
     }
+  },
+  mounted() {
+    // 获取推荐机票的图片信息
+    this.$axios({
+      url: '/airs/sale'
+    }).then(res => {
+      // console.log(res)
+      this.recomendAir = res.data.data
+    })
   }
 }
 </script>
@@ -124,6 +142,29 @@ export default {
       border-right: 1px solid #ccc;
       &:last-child {
         border-right: none;
+      }
+    }
+  }
+  .specialTicket {
+    padding-top: 20px;
+    width: 100%;
+    height: 162px;
+    border: 1px solid #ddd;
+    a {
+      display: block;
+      width: 225px;
+      height: 140px;
+      overflow: hidden;
+      img {
+        width: 100%;
+      }
+      .bgSpace {
+        width: 225px;
+        background-color: #61615e;
+        opacity: 0.8;
+        color: #fff;
+        position: absolute;
+        bottom: 0px;
       }
     }
   }
