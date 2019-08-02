@@ -31,6 +31,8 @@
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" style="width:210px" @click="handleSearch">搜索</el-button>
       </el-form-item>
+      <el-button type="info" class="btn" @click="changeSearch">换</el-button>
+      <div class="line"></div>
     </el-form>
   </div>
 </template>
@@ -150,14 +152,40 @@ export default {
         path: '/air/flights',
         query: this.searchForm
       })
+    },
+
+    // 点击“换”的按钮
+    changeSearch() {
+      const { departCity, departCode, destCity, destCode } = this.searchForm
+      this.searchForm.departCity =destCity
+      this.searchForm.departCode =destCode
+      this.searchForm.destCity =departCity
+      this.searchForm.destCode =departCode
+
+
     }
-  },
-
-  mounted() {
-    // 获取到输入建议的数据
-
   }
 }
 </script>
 <style lang="less" scoped>
+.btn {
+  padding: 5px !important;
+  line-height: 20px;
+  text-align: center;
+  position: absolute;
+  top: 117px;
+  left: 314px;
+  font-size: 12px;
+  z-index: 1;
+}
+.line {
+  width: 37px;
+  height: 58px;
+  border: 1px solid #dddddd;
+  border-left: none;
+  position: absolute;
+  top: 103px;
+  left: 288px;
+  z-index: 0;
+}
 </style>
