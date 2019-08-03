@@ -8,6 +8,17 @@
 
         <!-- 机票详情组件 -->
         <FlightsItem v-for="(item,index) in fligthsDate.flights" :key="index" :data="item" />
+
+        <!-- 分页设置 -->
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageIndex"
+          :page-sizes="[2, 4, 6, 8]"
+          :page-size="pageNum"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+        ></el-pagination>
       </div>
       <!-- 侧边栏部分 -->
       <aside></aside>
@@ -24,19 +35,51 @@ export default {
   },
   data() {
     return {
-      fligthsDate: {}
+      fligthsDate: {},
+      pageIndex: 1,
+      pageNum: 2,
+      total: 0,
+      dataList: []
+    }
+  },
+  methods: {
+    handleSizeChange(val) {
+      // console.log(`每页 ${val} 条`);
+      this.pageNum = val
+      //刷新列表数据
+      this.getDataList()
+    },
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`);
+      //0,2   2,4    4,6
+      this.pageIndex = val
+      //刷新列表数据
+      this.getDataList()
+    },
+    // 获取分页的数据
+    getDataList() {
+      // 修改dataList的数据
+      this.dataList = this.fligthsDate.flights.slice(
+        (this.pageIndex - 1) * this.pageNum,
+        (this.pageIndex - 1) * this.pageNum + this.pageNum
+      )
+    },
+    // 获取机票详情数据
+    getAllFlightsList() {
+      this.$axios({
+        url: '/airs',
+        method: 'GET',
+        params: this.$route.query
+      }).then(res => {
+        // console.log(res)
+        this.fligthsDate = res.data
+        this.total = res.data.flights.length
+      })
     }
   },
   mounted() {
     // 获取机票详情数据
-    this.$axios({
-      url: '/airs',
-      method: 'GET',
-      params: this.$route.query
-    }).then(res => {
-      console.log(res)
-      this.fligthsDate = res.data
-    })
+    this.getAllFlightsList()
   }
 }
 </script>
