@@ -7,7 +7,7 @@
         <FlightsHeader />
 
         <!-- 机票详情组件 -->
-        <FlightsItem />
+        <FlightsItem v-for="(item,index) in fligthsDate.flights" :key="index" :data="item" />
       </div>
       <!-- 侧边栏部分 -->
       <aside></aside>
@@ -21,6 +21,22 @@ import FlightsItem from '@/components/air/flightsItem.vue'
 export default {
   components: {
     FlightsHeader, FlightsItem
+  },
+  data() {
+    return {
+      fligthsDate: {}
+    }
+  },
+  mounted() {
+    // 获取机票详情数据
+    this.$axios({
+      url: '/airs',
+      method: 'GET',
+      params: this.$route.query
+    }).then(res => {
+      console.log(res)
+      this.fligthsDate = res.data
+    })
   }
 }
 </script>
