@@ -39,7 +39,7 @@
         </span>
       </el-col>
       <el-col :span="8">
-        <span>
+        <span class="lastRight">
           <i class="iconfont icondianhua"></i> 7*24小时服务
         </span>
       </el-col>
@@ -52,11 +52,15 @@
     <!-- 特价机票内容部分 -->
     <div class="specialTicket">
       <el-row type="flex" justify="space-around">
-        <nuxt-link to="#" v-for="(item,index) in recomendAir" :key="index">
+        <nuxt-link
+          :to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`"
+          v-for="(item,index) in recomendAir"
+          :key="index"
+        >
           <img :src="item.cover" alt />
           <el-row type="flex" justify="space-between" class="bgSpace">
             <span>{{item.departCity}}-{{item.destCity}}</span>
-            <span>{{item.price}}</span>
+            <span>￥{{Number(item.price).toFixed(2)}}</span>
           </el-row>
         </nuxt-link>
       </el-row>
@@ -140,9 +144,9 @@ export default {
       height: 100%;
       text-align: center;
       border-right: 1px solid #ccc;
-      &:last-child {
-        border-right: none;
-      }
+    }
+    .lastRight {
+      border-right: none;
     }
   }
   .specialTicket {
