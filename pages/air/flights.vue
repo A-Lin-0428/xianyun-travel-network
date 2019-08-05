@@ -3,11 +3,12 @@
     <el-row type="flex" justify="space-between">
       <!-- 主体部分 -->
       <div class="flights_content">
+        <FlightsFilters :data="staFligthsDate" @getDataList="getDataList" />
         <!-- 机票详情头部组件 -->
         <FlightsHeader />
 
         <!-- 机票详情组件 -->
-        <FlightsItem v-for="(item,index) in fligthsDate.flights" :key="index" :data="item" />
+        <FlightsItem v-for="(item,index) in dataList" :key="index" :data="item" />
 
         <!-- 分页设置 -->
         <el-pagination
@@ -29,13 +30,21 @@
 // 引入组件
 import FlightsHeader from '@/components/air/flightsHeader'
 import FlightsItem from '@/components/air/flightsItem.vue'
+import FlightsFilters from '@/components/air/flightsFilters.vue'
 export default {
   components: {
-    FlightsHeader, FlightsItem
+    FlightsHeader, FlightsItem, FlightsFilters
   },
   data() {
     return {
-      fligthsDate: {},
+      fligthsDate: {
+        info: {},
+        options: {}
+      },
+      staFligthsDate: {
+        info: {},
+        options: {}
+      },
       pageIndex: 1,
       pageNum: 2,
       total: 0,
@@ -57,7 +66,12 @@ export default {
       this.getDataList()
     },
     // 获取分页的数据
-    getDataList() {
+    getDataList(arr) {
+      if (arr) {
+        this.fligthsDate.flights = arr
+        // 处理分页显示问题
+        this.total = arr.length
+      }
       // 修改dataList的数据
       this.dataList = this.fligthsDate.flights.slice(
         (this.pageIndex - 1) * this.pageNum,
@@ -71,9 +85,13 @@ export default {
         method: 'GET',
         params: this.$route.query
       }).then(res => {
-        // console.log(res)
+        console.log(res)
+        // 处理选择一次后，数据被完全更新的问题
+        this.staFligthsDate = { ...res.data }
         this.fligthsDate = res.data
         this.total = res.data.flights.length
+        // 切割出当前页面要显示的数据
+        this.dataList = this.fligthsDate.flights.slice(0, 2)
       })
     }
   },
@@ -85,6 +103,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .contianer {
+  margin-bottom: 20px;
   .flights_content {
     width: 745px;
   }
