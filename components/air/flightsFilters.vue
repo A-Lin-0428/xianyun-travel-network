@@ -7,7 +7,7 @@
       <el-col :span="16">
         <div class="select">
           <el-row type="flex" justify="space-around">
-            <el-select v-model="airports" placeholder="起飞机场">
+            <el-select v-model="airports" placeholder="起飞机场" @change="handleAirports">
               <el-option
                 v-for="(item,index) in data.options.airport"
                 :key="index"
@@ -15,12 +15,12 @@
                 :value="item"
               ></el-option>
             </el-select>
-            <el-select v-model="flightTimes" placeholder="起飞时间">
+            <el-select v-model="flightTimes" placeholder="起飞时间" @change="handleFlightTimes">
               <el-option
                 v-for="(item ,index) in data.options.flightTimes"
                 :key="index"
                 :label="`${item.from}:00-${item.to}:00`"
-                :value="`${item.form},${item.to}`"
+                :value="`${item.from},${item.to}`"
               ></el-option>
             </el-select>
             <el-select v-model="company" placeholder="航空公司" @change="handleCompany">
@@ -31,7 +31,7 @@
                 :value="item"
               ></el-option>
             </el-select>
-            <el-select v-model="plane_size" placeholder="机型">
+            <el-select v-model="plane_size" placeholder="机型" @change="handlePlaneSize">
               <el-option
                 v-for="(item,index) in planeSizeList"
                 :key="index"
@@ -72,9 +72,27 @@ export default {
   },
   methods: {
     // 选择起飞机场
-
+    handleAirports(value) {
+      // console.log(value)
+      // 筛选出符合要求
+      const arr = this.data.flights.filter(val => {
+        return val.org_airport_name == value
+      })
+      // 刷新数据
+      this.$emit('getDataList', arr)
+    },
     // 选择起飞时间
-
+    handleFlightTimes(value) {
+      // console.log(value)  0,6
+      const [from, to] = value.split(',')
+      // 筛选过滤条件，保留符合要求的航班
+      const arr = this.data.flights.filter(val => {
+        const start = val.dep_time.split(':')[0]
+        return start >= from && start < to
+      })
+      // 刷新数据
+      this.$emit('getDataList', arr)
+    },
     // 选择航空公司
     handleCompany(value) {
       // console.log(value)
@@ -84,9 +102,18 @@ export default {
       })
       // 刷新数据
       this.$emit('getDataList', arr)
-    }
+    },
 
     // 选择飞机机型
+    handlePlaneSize(value) {
+      // 满足过滤条件的，筛选出来
+      const arr = this.data.flights.filter(val => {
+        return val.plane_size == value
+      })
+
+      // 刷新数据
+      this.$emit('getDataList', arr)
+    }
   }
 }
 </script>
