@@ -22,7 +22,9 @@
         ></el-pagination>
       </div>
       <!-- 侧边栏部分 -->
-      <aside></aside>
+      <aside>
+        <FlightsAside />
+      </aside>
     </el-row>
   </div>
 </template>
@@ -31,9 +33,10 @@
 import FlightsHeader from '@/components/air/flightsHeader'
 import FlightsItem from '@/components/air/flightsItem.vue'
 import FlightsFilters from '@/components/air/flightsFilters.vue'
+import FlightsAside from '@/components/air/flightsAside.vue'
 export default {
   components: {
-    FlightsHeader, FlightsItem, FlightsFilters
+    FlightsHeader, FlightsItem, FlightsFilters, FlightsAside
   },
   data() {
     return {

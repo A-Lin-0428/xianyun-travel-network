@@ -45,7 +45,7 @@
     </el-row>
     <span>
       筛选：
-      <el-button type="primary" plain class="btn">撤销</el-button>
+      <el-button type="primary" plain class="btn" @click="handleClear">撤销</el-button>
     </span>
   </div>
 </template>
@@ -113,6 +113,17 @@ export default {
 
       // 刷新数据
       this.$emit('getDataList', arr)
+    },
+    // 点击撤销按钮，恢复初始状态
+    handleClear() {
+      // 全部筛选数据清空
+      this.airports = '',
+        this.flightTimes = '',
+        this.company = '',
+        this.plane_size = ''
+      // 数据重新刷新
+      // 刷新数据
+      this.$emit('getDataList', this.data.flights)
     }
   }
 }
