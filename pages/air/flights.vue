@@ -88,7 +88,7 @@ export default {
         method: 'GET',
         params: this.$route.query
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         // 处理选择一次后，数据被完全更新的问题
         this.staFligthsDate = { ...res.data }
         this.fligthsDate = res.data
@@ -101,6 +101,13 @@ export default {
   mounted() {
     // 获取机票详情数据
     this.getAllFlightsList()
+  },
+  watch: {
+    // 监听路由信息的变化
+    $route() {
+      this.pageIndex = 1;
+      this.getAllFlightsList()
+    }
   }
 }
 </script>

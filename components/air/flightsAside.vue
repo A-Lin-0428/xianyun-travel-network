@@ -22,10 +22,15 @@
         <h4>历史查询</h4>
       </div>
       <div class="historyList">
-        <el-row type="flex" justify="space-between">
+        <el-row
+          type="flex"
+          justify="space-between"
+          v-for="(item,index) in $store.state.air.history "
+          :key="index"
+        >
           <div class="content">
-            <p>上海-广州</p>
-            <p>2019-08-03</p>
+            <p>{{item.departCity}}-{{item.destCity}}</p>
+            <p>{{item.departDate}}</p>
           </div>
           <el-button type="warning">选择</el-button>
         </el-row>
@@ -56,7 +61,7 @@ export default {
     }
     span {
       display: block;
-      width: 100%;
+      width: 97%;
       height: 35px;
       line-height: 35px;
       font-size: 14px;

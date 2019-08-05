@@ -152,15 +152,27 @@ export default {
         path: '/air/flights',
         query: this.searchForm
       })
+
+      // 获取出本地（vuex）的数据
+      const arr = [...this.$store.state.air.history];
+      // 新的记录添加到第一个
+      arr.unshift(this.searchForm)
+      // 历史记录只保留5位
+      if (arr.length > 5) {
+        arr.length = 5
+      }
+      // 调用vuex的方法来保存数据
+      this.$store.commit('air/getAirHistory', [this.searchForm])
+      this.$store.commit('air/getAirHistory', arr)
     },
 
     // 点击“换”的按钮
     changeSearch() {
       const { departCity, departCode, destCity, destCode } = this.searchForm
-      this.searchForm.departCity =destCity
-      this.searchForm.departCode =destCode
-      this.searchForm.destCity =departCity
-      this.searchForm.destCode =departCode
+      this.searchForm.departCity = destCity
+      this.searchForm.departCode = destCode
+      this.searchForm.destCity = departCity
+      this.searchForm.destCode = departCode
 
 
     }
