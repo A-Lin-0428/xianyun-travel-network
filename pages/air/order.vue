@@ -2,9 +2,11 @@
   <div class="container w">
     <el-row type="flex" justify="space-between">
       <el-col :span="14">
-        <OrderForm :data="infoData.insurances" />
+        <OrderForm :data="infoData" />
       </el-col>
-      <el-col :span="10"></el-col>
+      <el-col :span="10">
+        <OrderAside :data="infoData" />
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -12,16 +14,18 @@
 
 // 引用组件
 import OrderForm from '@/components/air/orderForm'
+import OrderAside from '@/components/air/orderAside.vue'
 export default {
   data() {
     return {
       infoData: {
-        insurances: []
+        insurances: [],
+        seat_infos: {}
       }
     }
   },
   components: {
-    OrderForm
+    OrderForm, OrderAside
   },
   methods: {
     getData() {
@@ -32,8 +36,8 @@ export default {
         params: { seat_xid, }
       }).then(res => {
         // console.log(res)
-        this.infoData.insurances = res.data.insurances
-        console.log(this.infoData)
+        this.infoData = res.data
+        // console.log(this.infoData)
       })
     }
   },

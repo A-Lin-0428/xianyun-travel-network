@@ -24,13 +24,20 @@
     <el-button type="primary" class="add-user" @click="handleAddUser">添加乘机人</el-button>
     <div class="insurance">
       <h2>保险</h2>
-      <el-checkbox-group v-for="(item,index) in data.insurances&&data.insurances" :key="index">
+      <div class="insurance-item" v-for="(item, index) in data.insurances" :key="index">
+        <el-checkbox
+          :label="`${item.type}：￥${item.price}/份×${users.length}  最高赔付${item.compensation}`"
+          @change="handleChange(item)"
+          border
+        ></el-checkbox>
+      </div>
+      <!-- <el-checkbox-group v-for="(item,index) in data.insurances" :key="index">
         <el-checkbox
           :label="`${item.type}：￥${item.price}/份x1 最高赔付${item.compensation}`"
           border
-          @change="handleInsuId(item)"
-        ></el-checkbox>
-      </el-checkbox-group>
+          @change="handleChange(item)"
+      ></el-checkbox>-->
+      <!-- </el-checkbox-group> -->
     </div>
     <div class="linkman">
       <h2>联系人</h2>
@@ -39,8 +46,10 @@
           <el-input v-model="contactName"></el-input>
         </el-form-item>
         <el-form-item label="手机">
-          <el-input placeholder="请输入内容" v-model="contactPhnoe">
-            <template slot="append">发送验证码</template>
+          <el-input placeholder="请输入内容" v-model="contactPhone">
+            <template slot="append">
+              <el-button @click="handleSendCaptcha">发送验证码</el-button>
+            </template>
           </el-input>
         </el-form-item>
         <el-form-item label="验证码">
@@ -48,7 +57,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-button type="warning" class="btn">提交订单</el-button>
+    <el-button type="warning" class="btn" @click="handleOrder">提交订单</el-button>
   </div>
 </template>
 <script>
@@ -56,7 +65,8 @@ export default {
   props: {
     data: {
       type: Object,
-      default: {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -64,11 +74,11 @@ export default {
       users: [{ username: '', id: '' }],
       insurances: [],
       contactName: '',
-      contactPhnoe: '',
+      contactPhone: '',
       captcha: '',
       invoice: false,
       seat_xid: '',
-      air: 0,
+      air: 0
 
     }
   },
@@ -83,12 +93,73 @@ export default {
       this.users.splice(index, 1)
     },
     // 点击保险选项的触发
-    handleInsuId(item) {
-      console.log(item)
+    handleChange(item) {
+      // console.log(item)
+      // 判断数组中是否存在id,如果存在需要删除
+      const index = this.insurances.indexOf(item.id)
+      if (index > -1) {
+        this.insurances.splice(index, 1)
+      } else {
+        this.insurances.push(item.id)
+      }
+    },
+    // 点击发送验证码按钮触发
+    handleSendCaptcha() {
+      // console.log(123)
+      // 判断手机号码是否为空
+      if (!this.contactPhone) {
+        this.$message.warning('手机号码不能为空');
+        return
+      }
+      this.$axios({
+        url: '/captchas',
+        method: 'POST',
+        data: {
+          tel: this.contactPhone
+        }
+      }).then(res => {
+        const { code } = res.data
+        this.$alert(`模拟手机验证码为：${code}`, '提示', { type: " warning" })
+      })
+    },
+    // 点击提交订单
+    handleOrder() {
+      const data = {
+        users: this.users,
+        insurances: this.insurances,
+        contactName: this.contactName,
+        contactPhone: this.contactPhone,
+        invoice: this.invoice,
+        captcha: this.captcha,
+        seat_xid: this.$route.query.seat_xid,
+        air: this.$route.query.id
+      }
+      console.log(data)
+      this.$axios({
+        url: '/airorders',
+        method: 'POST',
+        headers: { Authorization: `Bearer ${this.$store.state.user.userInfo.token}` },
+        data
+      }).then(res => {
+        // 温馨提示用户
+        this.$message.success('订单正在生成，请稍后')
+      })
+      // console.log(res)
+      // 生成订单成功，跳转到付款页面中
+      this.$router.push({
+        path: `/air/pay`,
+        query: { id: this.$route.query.id }
+      })
+
     }
+
   },
   mounted() {
-    console.log(this.data)
+    // setTimeout(() => {
+    //   this.insurances = this.data.insurances
+    //   console.log(this.data)
+    // }, 1000)
+
   }
 
 }
@@ -148,6 +219,11 @@ export default {
     text-align: center;
     line-height: 37px;
     margin-left: 200px;
+  }
+  /deep/.el-input-group__prepend {
+    .el-input__inner {
+      width: 100px;
+    }
   }
 }
 </style>
