@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container w">
     <el-row type="flex" justify="space-between">
       <el-col :span="14">
         <OrderForm />
