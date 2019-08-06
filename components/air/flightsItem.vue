@@ -59,7 +59,7 @@
             <el-row type="flex" justify="space-around" align="middle">
               <i style="font-size:20px;color:#e6a23c">￥{{item.org_settle_price}}</i>
               <span>
-                <div class="box">选定</div>
+                <div class="box" @click="handleSubmit(data.id,item.seat_xid)">选定</div>
                 <span class="discount">剩余：{{item.discount}}</span>
               </span>
             </el-row>
@@ -93,6 +93,16 @@ export default {
       const hour = Math.floor(dis / 60)
       const min = dis % 60
       return `${hour}时${min}分钟`
+    }
+  },
+  methods: {
+    // 点击选定后，跳转到订单页面
+    handleSubmit(id, seat_xid) {
+      // 点击之后，跳转到详情页面
+      this.$router.push({
+        path: '/air/order',
+        query: { id, seat_xid }
+      })
     }
   }
 }
