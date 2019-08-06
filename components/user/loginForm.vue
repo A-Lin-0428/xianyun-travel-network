@@ -41,7 +41,9 @@ export default {
             // this.$state.userInfo = res.data
             // console.log(this.$store)
             this.$store.commit('user/getUserInfo', res.data)
-            this.$router.push('/')
+            // this.$router.push('/')
+            // 返回上一页
+            this.$router.back()
           })
         }
       })

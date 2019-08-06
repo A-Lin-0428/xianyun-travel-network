@@ -6,8 +6,15 @@ export default function ({ $axios, redirect }) {
     // console.log(err)
     const { statusCode, message } = err.response.data
 
-    if (statusCode === 400) {
-      Message.warning({ message })
+    if (statusCode) {
+      if (statusCode === 403 || statusCode === 401) {
+        // 跳转到登录页面
+        redirect('/user/login')
+      }
+
+      if (statusCode === 400) {
+        Message.warning({ message })
+      }
     }
   })
 }
