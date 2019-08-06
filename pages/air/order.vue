@@ -2,10 +2,10 @@
   <div class="container w">
     <el-row type="flex" justify="space-between">
       <el-col :span="14">
-        <OrderForm :data="infoData" />
+        <OrderForm :data="infoData" @getAllPrice="getAllPrice" />
       </el-col>
       <el-col :span="10">
-        <OrderAside :data="infoData" />
+        <OrderAside :data="infoData" :allprice="allprice" />
       </el-col>
     </el-row>
   </div>
@@ -21,7 +21,8 @@ export default {
       infoData: {
         insurances: [],
         seat_infos: {}
-      }
+      },
+      allprice: 0
     }
   },
   components: {
@@ -39,6 +40,9 @@ export default {
         this.infoData = res.data
         // console.log(this.infoData)
       })
+    },
+    getAllPrice(price) {
+      this.allprice = price
     }
   },
   mounted() {

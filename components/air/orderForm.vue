@@ -58,6 +58,8 @@
       </el-form>
     </div>
     <el-button type="warning" class="btn" @click="handleOrder">提交订单</el-button>
+    <!-- 调用allpice让总价开始计算 -->
+    <input type="hidden" :value="getAllPrice" />
   </div>
 </template>
 <script>
@@ -153,6 +155,28 @@ export default {
 
     }
 
+  },
+  computed: {
+    // 计算总价格
+    getAllPrice() {
+      let price = 0;
+      // 接口还没有返回，默认是0
+      if (!this.data.seat_infos) {
+        return 0
+      }
+      // 单价
+      price += this.data.seat_infos.org_settle_price
+      // 保险
+      price += this.insurances.length * 30
+      // 燃油费
+      price += this.data.airport_tax_audlet
+
+      // 人数
+      price *= this.users.length
+      // 把总价格返回给父组件
+      this.$emit("getAllPrice", price)
+      return price;
+    }
   },
   mounted() {
     // setTimeout(() => {
