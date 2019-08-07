@@ -28,8 +28,28 @@ import Qrcode from 'qrcode'
 export default {
   data() {
     return {
-      paydetail: {}
+      paydetail: {},
+      timer: null
     }
+  },
+  methods: {
+    //  获取付款信息，每3秒查询一次
+    ispay() {
+      return this.$axios({
+        url: '/airorders/checkpay',
+        method: 'POST',
+        data: {
+          id: this.paydetail.id,
+          nonce_str: this.paydetail.price,
+          out_trade_no: this.paydetail.orderNo
+        },
+        headers: { Authorization: `Bearer ${this.$store.state.user.userInfo.token}` }
+      }).then(res => {
+        // console.log(res)
+        return res.data
+      })
+    }
+
   },
   mounted() {
 
@@ -49,7 +69,26 @@ export default {
       Qrcode.toCanvas(stage, this.paydetail.payInfo.code_url, {
         width: 200
       })
+
+      this.timer = setInterval(() => {
+        // 查询订单的状态
+        this.ispay().then(val => {
+          // console.log(val)
+          if (val.statusTxt === '支付完成') {
+            clearInterval(this.timer)
+            // 并提示用户付款成功
+            this.$message.success('订单付款成功')
+            // 跳转到首页
+            this.$router.push('/')
+          }
+        })
+
+
+      }, 3000)
     })
+  },
+  destroyed() {
+    clearInterval(this.timer)
   }
 }
 </script>
