@@ -19,13 +19,13 @@
               style="margin-left: 20px;"
               placeholder="不限"
               class="clearborder"
-              automatic-dropdown="true"
+              :automatic-dropdown="true"
             >
               <el-option
-                v-for="(item,index) in ['1星','2星','3星','4星','5星']"
+                v-for="(item,index) in hotelSelect.levels"
                 :key="index"
-                :label="item"
-                :value="item"
+                :label="item.name"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-col>
@@ -40,10 +40,10 @@
               class="clearborder"
             >
               <el-option
-                v-for="(item,index) in ['经济型','舒适型','高档型','豪华型','度假村','公寓式酒店']"
+                v-for="(item,index) in hotelSelect.types"
                 :key="index"
-                :label="item"
-                :value="item"
+                :label="item.name"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-col>
@@ -58,10 +58,10 @@
               class="clearborder"
             >
               <el-option
-                v-for="(item,index) in ['wifi','热水壶','抽风机','外币兑换服务','洗衣服务','电梯']"
-                :key="index"
-                :label="item"
-                :value="item"
+                v-for="item in hotelSelect.assets"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-col>
@@ -76,10 +76,10 @@
               class="clearborder"
             >
               <el-option
-                v-for="(item,index) in ['7天连锁','汉庭','如家','格林豪泰','....']"
+                v-for="(item,index) in hotelSelect.brands"
                 :key="index"
-                :label="item"
-                :value="item"
+                :label="item.name"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-col>
@@ -92,12 +92,25 @@
 export default {
   data() {
     return {
+      // 选定后，双向绑定保存的数据
       price: '',
       hotelStar: '',
       hotelStyle: '',
       hotelServe: '',
-      hotelBrand: ''
+      hotelBrand: '',
+      // 获取酒店选项，保存的数据
+      hotelSelect: {}
     }
+  },
+  mounted() {
+    // 获取酒店选项
+    this.$axios({
+      url: '/hotels/options',
+      method: 'GET'
+    }).then(res => {
+      // console.log(res.data.data)
+      this.hotelSelect = res.data.data
+    })
   }
 }
 </script>

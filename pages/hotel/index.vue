@@ -6,12 +6,12 @@
       <el-breadcrumb-item>南京市酒店预订</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 预订需求组件 -->
-    <RequireSelect />
+    <RequireSelect @getCityInfo="getCityInfo" />
 
     <!-- 城市地区和地图结构显示 -->
     <el-row type="flex" :gutter="20">
       <el-col :span="14">
-        <AddressShow />
+        <AddressShow :data="CityInfo" />
       </el-col>
       <el-col :span="10">
         <MapShow />
@@ -43,6 +43,18 @@ import HotelList from '@/components/hotel/hotelList'
 export default {
   components: {
     RequireSelect, AddressShow, MapShow, HotelSelect, HotelList
+  },
+  data() {
+    return {
+      CityInfo: {}
+    }
+  },
+  methods: {
+    //  通过事件接收addressShow下来的数据
+    getCityInfo(item) {
+      // console.log(item)
+      this.CityInfo = item
+    }
   }
 }
 </script>

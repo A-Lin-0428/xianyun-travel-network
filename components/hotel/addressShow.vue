@@ -5,7 +5,7 @@
         <el-col :span="4">区域：</el-col>
         <el-col :span="20">
           <a href="#">全部</a>
-          <a href="#">镇兴路沿线</a>
+          <a href="#" v-for="(item,index) in data.scenics" :key="index">{{item.name}}</a>
         </el-col>
       </el-row>
     </div>
@@ -86,7 +86,12 @@
 </template>
 <script>
 export default {
-
+  props: {
+    data: {
+      type: Object,
+      default: {}
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -95,6 +100,7 @@ export default {
   font-size: 14px;
   color: #666;
   a {
+    margin-right: 10px;
     color: inherit;
     &:hover {
       color: #409eff;

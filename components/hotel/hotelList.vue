@@ -1,31 +1,36 @@
 <template>
   <div class="container">
     <div class="hotelList">
-      <el-row type="flex" :gutter="30" justiy="space-between">
+      <el-row
+        type="flex"
+        :gutter="30"
+        justiy="space-between"
+        v-for="(item,index) in hotelInfo"
+        :key="index"
+      >
         <el-col :span="8">
-          <img
-            src="https://p1.meituan.net/deal/e8d242e373ae75ba506f8c5c7551214b122663.jpg%40700w_700h_0e_1l%7Cwatermark%3D1%26%26r%3D1%26p%3D9%26x%3D2%26y%3D2%26relative%3D1%26o%3D20"
-            alt
-          />
+          <div class="img">
+            <img :src="item.photos" alt />
+          </div>
         </el-col>
-        <el-row :span="16">
+        <el-col :span="16">
           <el-row>
             <el-col :span="16">
-              <p style="font-size:22px">7天连锁酒店（南京中山陵光华路店）</p>
+              <p style="font-size:22px">{{item.name}}</p>
               <p style="color:#999999">
-                <span>7 tian lian suo hotel (nan jing zhong shan ling guang hua lu dian)</span>
+                <span>{{item.alias}}</span>
                 <span class="activeColor">
                   <i class="iconfont iconhuangguan"></i>
                   <i class="iconfont iconhuangguan"></i>
                   <i class="iconfont iconhuangguan"></i>
                 </span>
-                <span>经济型</span>
+                <span>{{item.hoteltype&&item.hoteltype.name}}</span>
               </p>
               <p style="margin:10px 0 ">
                 <el-row type="flex" justiy="space-between">
                   <el-col :span="10">
                     <el-rate
-                      v-model="grade"
+                      v-model="item.stars"
                       disabled
                       show-score
                       text-color="#ff9900"
@@ -33,28 +38,28 @@
                     ></el-rate>
                   </el-col>
                   <el-col :span="7">
-                    <i class="activeColor">96</i> 条评论
+                    <i class="activeColor">{{item.all_remarks}}</i> 条评论
                   </el-col>
                   <el-col :span="7">
-                    <i class="activeColor">63</i> 篇游记
+                    <i class="activeColor">{{item.num_collected}}</i> 篇游记
                   </el-col>
                 </el-row>
               </p>
               <p style="color:#666;font-size:14px">
                 <i class="iconfont iconlocation"></i>
-                <span>位于: 光华路114号金弘基大厦院内(近苜蓿园大街南)</span>
+                <span>位于:{{item.address}}</span>
               </p>
             </el-col>
             <el-col :span="8" class="OtherPlatforms">
-              <nuxt-link to="#">
+              <nuxt-link to="#" v-for="(item2,index2) in item.products" :key="index2">
                 <el-row type="flex" justify="space-between">
-                  <span>携程</span>
+                  <span>{{item2.name}}</span>
                   <span>
-                    <i class="activeColor">￥114</i>起 >
+                    <i class="activeColor">￥{{item2.price}}</i>起 >
                   </span>
                 </el-row>
               </nuxt-link>
-              <nuxt-link to="#">
+              <!-- <nuxt-link to="#">
                 <el-row type="flex" justify="space-between">
                   <span>艺龙</span>
                   <span>
@@ -69,10 +74,10 @@
                     <i class="activeColor">￥162</i>起 >
                   </span>
                 </el-row>
-              </nuxt-link>
+              </nuxt-link>-->
             </el-col>
           </el-row>
-        </el-row>
+        </el-col>
       </el-row>
     </div>
   </div>
@@ -81,10 +86,34 @@
 export default {
   data() {
     return {
-      grade: 4.5
+      grade: 4.5,
+      hotelInfo: [],
+      hotelSearch: {
+        city: ''
+
+      }
     }
+  },
+  // },
+  watch: {
+    // 监视url的变化,并获取到城市id
+    $route() {
+
+      // 获取到城市id
+      const { city } = this.$route.query
+      //  发送请求，获取该城市下的酒店详情
+      this.$axios({
+        url: '/hotels',
+        params: { city }
+      }).then(res => {
+        this.hotelInfo = res.data.data
+        // console.log(this.hotelInfo)
+
+      })
+    },
   }
 }
+
 </script>
 <style lang="less" scoped>
 .container {
@@ -92,8 +121,13 @@ export default {
     padding-bottom: 30px;
     border-bottom: 1px solid #eeeeee;
   }
-  img {
+  .img {
     width: 100%;
+
+    img {
+      width: 320px;
+      height: 210px;
+    }
   }
   .activeColor {
     color: #f7ba2a;

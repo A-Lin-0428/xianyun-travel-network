@@ -2,7 +2,13 @@
   <div class="container">
     <el-row type="flex" :gutter="20">
       <el-col :span="5">
-        <el-input v-model="destination" placeholder="目的地"></el-input>
+        <el-autocomplete
+          class="el-autocomplete"
+          v-model="destination"
+          :fetch-suggestions="queryCitySearch"
+          placeholder="目的地"
+          @select="handleCitySelect"
+        ></el-autocomplete>
       </el-col>
       <el-col :span="14">
         <el-row type="flex">
@@ -68,10 +74,56 @@ export default {
       isShow: false,
       adultArr: [1, 2, 3, 4, 5, 6, 7],
       adultNum: '2成人',
-      childNum: '0儿童'
+      childNum: '0儿童',
+      cityInfo: {}
     }
   },
   methods: {
+    // fetch-suggestions 当每次在输入框中输入文字的时候回触发该事件
+    queryCitySearch(value, cb) {
+      // value:输入框的值
+      // cb:回调函数，必须要调用，接收的参数格式是固定的，必须是一个数组，且数组中每一项必须
+      // 是对象
+      if (!value) {
+        cb([])
+        return
+      }
+      // 获取城市列表
+      this.$axios({
+        url: '/cities',
+        params: {
+          name: value
+        }
+      }).then(res => {
+        // console.log(res)
+        const { data } = res.data
+
+        // 如用户没有点击选中，直接默认选中第一个
+        this.destination = data[0].name
+        // 循环数组，给每一项数据添加一个value属性
+        const newDate = []
+
+        data.forEach(v => {
+          v.value = v.name;
+          newDate.push(v)
+        });
+        cb(newDate)
+      })
+
+    },
+    // select 点击选中建议项时触发
+    handleCitySelect(item) {
+      this.cityInfo = item
+      // console.log(this.cityInfo)
+      // 将数据传递给父组件
+      this.$emit('getCityInfo', item)
+      // 跳转到具体城市酒店详情页
+      this.$router.push({
+        path: '/hotel',
+        query: { city: item.id }
+      }
+      )
+    },
     //  点击人员数量确定时候触发
     handleSumbit() {
       //  收回弹窗
