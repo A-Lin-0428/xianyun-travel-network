@@ -85,4 +85,10 @@ dist
 sw.*
 
 # Mac OSX
+<<<<<<< HEAD
 .DS_Store
+=======
+.DS_Store
+
+.package-lock.json
+>>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e

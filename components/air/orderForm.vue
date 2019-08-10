@@ -81,7 +81,10 @@ export default {
       invoice: false,
       seat_xid: '',
       air: 0
+<<<<<<< HEAD
 
+=======
+>>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
     }
   },
   methods: {
@@ -136,7 +139,34 @@ export default {
         seat_xid: this.$route.query.seat_xid,
         air: this.$route.query.id
       }
+<<<<<<< HEAD
       console.log(data)
+=======
+
+      let valid = true
+      // 验证乘机人信息不能为空
+      this.users.forEach(val => {
+        if (!val.username || !val.id) {
+          //  不通过
+          valid = false
+          this.$alert("乘机人信息不能为空", "提示", { type: "warning" })
+        }
+
+      });
+
+      if (!valid) {
+        return
+      }
+      // 验证联系人不能为空
+      if (!this.contactPhone) {
+        this.$alert("联系人信息不能为空", "提示", { type: "warning" })
+        return
+      }
+      // 验证验证码按钮不能为空
+      if (!this.captcha) {
+        return
+      }
+>>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
       this.$axios({
         url: '/airorders',
         method: 'POST',
@@ -144,6 +174,7 @@ export default {
         data
       }).then(res => {
         // 温馨提示用户
+<<<<<<< HEAD
         this.$message.success('订单正在生成，请稍后')
       })
       // console.log(res)
@@ -153,6 +184,28 @@ export default {
         query: { id: this.$route.query.id }
       })
 
+=======
+        // console.log(res)
+
+        this.$message.success('订单提交成功，正在跳转')
+
+        setTimeout(() => {
+
+          const { id } = res.data.data
+
+
+          // console.log(this.data)
+          // 生成订单成功，跳转到付款页面中
+          this.$router.push({
+            path: '/air/pay',
+            query: { id }
+          })
+        }, 1000)
+
+      })
+
+
+>>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
     }
 
   },

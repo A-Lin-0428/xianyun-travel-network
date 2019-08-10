@@ -30,8 +30,17 @@
 
         <!-- 输入框 -->
         <el-row type="flex" align="middle" class="search-input">
+<<<<<<< HEAD
           <input :placeholder="content[current].placeholder" v-model="searchValue" />
           <i class="el-icon-search"></i>
+=======
+          <input
+            :placeholder="content[current].placeholder"
+            v-model="searchValue"
+            @keyup.enter="searchSubmit"
+          />
+          <i class="el-icon-search" @click="searchSubmit"></i>
+>>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
         </el-row>
       </div>
     </div>
@@ -60,6 +69,25 @@ export default {
         this.$router.push('/air')
       }
       this.current = index
+<<<<<<< HEAD
+=======
+    },
+    // 点击搜索，跳转到指定的页面
+    searchSubmit() {
+      // console.log(123)
+      if (this.current == 0) {
+        this.$router.push({
+          path: '/post',
+          query: { city: this.searchValue }
+        })
+      } else if (this.current == 1) {
+        this.$router.push({
+          path: '/hotel',
+          query: { city: this.searchValue }
+        })
+      }
+
+>>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
     }
   },
   mounted() {
@@ -75,6 +103,10 @@ export default {
 
     })
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
 }
 </script>
 <style lang="less" scoped>
