@@ -20,12 +20,13 @@
               placeholder="不限"
               class="clearborder"
               :automatic-dropdown="true"
+              @change="handleLevel"
             >
               <el-option
                 v-for="(item,index) in hotelSelect.levels"
                 :key="index"
                 :label="item.name"
-                :value="item.id"
+                :value="item.name"
               ></el-option>
             </el-select>
           </el-col>
@@ -57,12 +58,13 @@
               style="margin-left: 20px;"
               placeholder="不限"
               class="clearborder"
+              @change="handleAssets"
             >
               <el-option
                 v-for="item in hotelSelect.assets"
                 :key="item.id"
                 :label="item.name"
-                :value="item.id"
+                :value="item.name"
               ></el-option>
             </el-select>
           </el-col>
@@ -75,12 +77,13 @@
               style="margin-left: 20px;"
               placeholder="不限"
               class="clearborder"
+              @change="handleBrand"
             >
               <el-option
                 v-for="(item,index) in hotelSelect.brands"
                 :key="index"
                 :label="item.name"
-                :value="item.id"
+                :value="item.name"
               ></el-option>
             </el-select>
           </el-col>
@@ -132,9 +135,73 @@ export default {
       this.$emit('getFliterHotel', arr)
 
     },
+    // 筛选酒店级别
+    handleLevel(val) {
+      //  val是数组
+      // console.log(val)
+      const newArr = this.Info.filter(item => {
+        let pass = true;
+        val.forEach(v => {
+          // 满足每个数据的值和过滤条件的值相等
+          if (item.hotellevel.name !== v) {
+            pass = false
+          }
+        });
+        return pass;
+      })
+      this.$emit('getFliterHotel', newArr)
+
+    },
     // 筛选酒店类型
     handleStyle(val) {
       //  val是数组
+      const newArr = this.Info.filter(item => {
+        let pass = true;
+        val.forEach(v => {
+          // 满足每个数据的值和过滤条件的值相等
+          if (item.hoteltype.name !== v) {
+            pass = false
+          }
+        });
+        return pass;
+      })
+      this.$emit('getFliterHotel', newArr)
+
+
+    },
+    // 筛选酒店服务
+    handleAssets(val) {
+      const newArr = this.Info.filter(item => {
+        let pass = true;
+        if (item.hotelassets == []) {
+          return
+        }
+        val.forEach(v => {
+          if (item.hotelassets.name !== v) {
+            pass = false
+          }
+        });
+        return pass
+      })
+      this.$emit('getFliterHotel', newArr)
+    },
+    //筛选酒店品牌
+    handleBrand(val) {
+      //  val是数组
+      const newArr = this.Info.filter(item => {
+        let pass = true;
+        if (item.hotelbrand == null) {
+          return
+        }
+        val.forEach(v => {
+          // 满足每个数据的值和过滤条件的值相等
+          if (item.hotelbrand.name !== v) {
+            pass = false
+          }
+        });
+        return pass;
+      })
+      this.$emit('getFliterHotel', newArr)
 
     }
   }
