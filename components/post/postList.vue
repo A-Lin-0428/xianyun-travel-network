@@ -27,9 +27,9 @@
       <div class="search-recommend">
         <el-row>
           推荐：
-          <span>广州</span>
-          <span>上海</span>
-          <span>北京</span>
+          <span @click="search='广州'" style="cursor:pointer">广州</span>
+          <span @click="search='上海'" style="cursor:pointer">上海</span>
+          <span @click="search='北京'" style="cursor:pointer">北京</span>
         </el-row>
       </div>
     </div>
@@ -38,12 +38,12 @@
     <el-row type="flex" justify="space-between" align="middle" class="post-title">
       <h1>推荐攻略</h1>
       <nuxt-link to="/post/create">
-      <el-button type="primary" icon="el-icon-edit" >写游记</el-button>
+        <el-button type="primary" icon="el-icon-edit">写游记</el-button>
       </nuxt-link>
     </el-row>
 
     <!-- 攻略列表 -->
-    <div class="postList" v-for="(item,index) in data" :key="index">
+    <div class="postList" v-for="(item,index) in list" :key="index">
       <!-- 当index不等于1的时候用下面这串结构 -->
       <div v-if="index !==1">
         <el-row type="flex" justify="space-between" class="post-item" align="middle">
@@ -67,11 +67,11 @@
           <el-row class="post-info-left">
             <el-col :span="2">
               <span>
-                <i class="el-icon-location-outline">{{item.cityName}}</i>
+                <i class="el-icon-location-outline" style="width:65px;">{{item.cityName}}</i>
               </span>
             </el-col>
             <el-row class="post-user" type="flex" justify="space-between">
-              <span>&nbsp;&nbsp;by</span>
+              <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by</span>
               <el-col :span="2">
                 <nuxt-link to="/post/detail?id=4">
                   <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" />
@@ -81,12 +81,12 @@
               <el-col>
                 <span>
                   &nbsp;&nbsp;
-                  <i class="el-icon-view">5644</i>
+                  <i class="el-icon-view">{{item.watch}}</i>
                 </span>
               </el-col>
               <!-- 右边 点赞 -->
               <el-col :span="4">
-                <span class="post-info-right">42 赞</span>
+                <span class="post-info-right">{{item.like}}</span>
               </el-col>
             </el-row>
           </el-row>
@@ -131,13 +131,12 @@
                 <el-col>
                   <span>
                     &nbsp;&nbsp;
-                    <i class="el-icon-view">5644</i>
+                    <i class="el-icon-view">{{item.watch}}</i>
                   </span>
                 </el-col>
-
                 <!-- 右边 点赞 -->
                 <el-col :span="4">
-                  <span class="post-info-right">42 赞</span>
+                  <span class="post-info-right">{{item.like}}</span>
                 </el-col>
               </el-row>
             </el-row>
@@ -145,7 +144,12 @@
         </div>
       </div>
     </div>
+<<<<<<< HEAD
 >>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
+=======
+    <!-- 分页 -->
+    <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :total="total"></el-pagination>
+>>>>>>> c350fca0c1d9a6168ac3663daf4ef220f348026f
   </div>
 </template>
 
@@ -154,68 +158,87 @@
 export default {};
 =======
 export default {
-  //props传值  接收父组件传递过来的数据
-  props: {
-    data: {
-      type: Array,
-      default: []
-    }
-  },
   data() {
     return {
-      // city: "",
-      // cityName: ""
-      search: ""
+      search: "",
+      list: "",
+      total: null,
+      page: 0,
+      searchShow: false
     };
   },
   methods: {
+    handleCurrentChange(val) {
+      this.page = val;
+    },
     //获取搜索框内容
     getSearch(val) {
       let search = val;
-      // 设置一个空的数组,用于存储过滤后的数据
-      let arr = [];
-      // 遍历data数据
-      for (let i = 0; i < this.data.length; i++) {
-        // 只有data数据的第i个indexof有输入框输入的东西的时候才进来
-        if (
-          this.data[i].summary.indexOf(search) !== -1 ||
-          this.data[i].title.indexOf(search) !== -1
-        ) {
-          arr.push(this.data[i]);
-        }
-      }
-      this.data = arr;
-    },
-    //获取文章点赞数据
-    getPostLike() {
+      // var arr = []; // 设置一个空的数组,用于存储过滤后的数据
       this.$axios({
-        url: "/posts/like",
+        url: "/posts",
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${this.$store.state.post.postInfo.token}`
-        }
+        params: { _start: this.pageIndex, _limit: this.pageNum }
       }).then(res => {
-        console.lg(res, "文章点赞数据");
-        this.$store.commit("post/getPostInfo", res.data);
+        this.list = res.data.data;
+        console.log(this.list, "主页文章列表数据");
+        // this.total = res.data.data.length;
+      });
+      // 判断有没有输入关键字,如果有在所有数据中筛选,每个元素是否有关键字,没有则显示所有数据
+      this.list = this.search
+        ? this.list.filter(item => item.cityName.includes(this.search))
+        : this.list;
+      // 把值存储到store中:使用方法 this.$store.commit('方法的文件名/方法名')
+      this.$store.commit("post/getPostSearch", this.list);
+    },
+    // 获取旅游列表数据
+    GetPostsList() {
+      let params;
+      if (this.searchShow === false) {
+        params = {
+          _start: this.page,
+          _limit: 3
+        };
+      } else if (this.searchShow) {
+        params = {
+          _start: this.page,
+          _limit: 3,
+          city: this.search
+        };
+      }
+      // 客户端总100条接口的旅游列表数据
+      this.$axios({
+        method: "get",
+        url: "http://157.122.54.189:9095/posts",
+        params: params
+      }).then(list => {
+        this.list = list.data.data;
+        this.total = list.data.total;
+        console.log("总100条接口", this.list);
       });
     }
   },
   watch: {
     // 把val传过去搜索框
     search: function(val) {
-      console.log(val, "搜索内容");
-      // 只有在输入框输入东西的时候才会运行
-      if (val !== "") {
-        this.getSearch(val);
+      // console.log(val, "监听搜索内容");
+      // 如果搜索内容为空,不打开搜索框,获取本地接口数据;如果有输入内容,获取线上100条数据
+      if (val == "") {
+        this.searchShow = false;
+        this.GetPostsList();
+      } else {
+        this.searchShow = true;
+        this.GetPostsList();
       }
-      // 判断有没有输入关键字,如果有在所有数据中筛选,每个元素是否有关键字,没有则显示所有数据
-      // this.data = this.search
-      //   ? this.data.filter(item => item.summary.includes(this.search))
-      //   : this.data;
+    },
+    //监听点击页码,调用方法获取数据
+    page() {
+      this.GetPostsList();
     }
   },
-  mounted() {
-    // this.getPostLike();
+  // 在页面加载前先执行
+  created() {
+    this.GetPostsList();
   }
 };
 >>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e

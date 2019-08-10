@@ -74,11 +74,7 @@ export default {
     // 选择起飞机场
     handleAirports(value) {
       // console.log(value)
-<<<<<<< HEAD
-      // 筛选出符合要求,然后返回
-=======
       // 筛选出符合要求
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
       const arr = this.data.flights.filter(val => {
         return val.org_airport_name == value
       })

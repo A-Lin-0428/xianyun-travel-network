@@ -81,10 +81,6 @@ export default {
       invoice: false,
       seat_xid: '',
       air: 0
-<<<<<<< HEAD
-
-=======
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
     }
   },
   methods: {
@@ -139,9 +135,6 @@ export default {
         seat_xid: this.$route.query.seat_xid,
         air: this.$route.query.id
       }
-<<<<<<< HEAD
-      console.log(data)
-=======
 
       let valid = true
       // 验证乘机人信息不能为空
@@ -166,7 +159,6 @@ export default {
       if (!this.captcha) {
         return
       }
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
       this.$axios({
         url: '/airorders',
         method: 'POST',
@@ -174,17 +166,6 @@ export default {
         data
       }).then(res => {
         // 温馨提示用户
-<<<<<<< HEAD
-        this.$message.success('订单正在生成，请稍后')
-      })
-      // console.log(res)
-      // 生成订单成功，跳转到付款页面中
-      this.$router.push({
-        path: `/air/pay`,
-        query: { id: this.$route.query.id }
-      })
-
-=======
         // console.log(res)
 
         this.$message.success('订单提交成功，正在跳转')
@@ -205,7 +186,6 @@ export default {
       })
 
 
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
     }
 
   },

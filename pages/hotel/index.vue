@@ -1,11 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div>酒店业务首页</div>
-</template>
-
-<script>
-export default {
-=======
   <div class="container w">
     <!-- 面包屑样式 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -102,15 +95,10 @@ export default {
       this.cacheHotelInfo = [...res.data.data]
     })
   }
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
 
 }
 </script>
 
-<<<<<<< HEAD
-<style>
-</style>
-=======
 <style lang="less" scoped>
 .container {
   margin-top: 25px;
@@ -120,4 +108,3 @@ export default {
 }
 </style>
 
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
