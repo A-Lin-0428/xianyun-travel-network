@@ -130,8 +130,6 @@ export default {
         border-top: 5px solid #ffa500;
       }
     }
-    .market {
-    }
   }
   .servie {
     height: 40px;

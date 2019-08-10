@@ -1,7 +1,4 @@
 <template>
-<<<<<<< HEAD
-    
-=======
   <div class="menus-wrapper">
     <div class="meus-header" @mouseleave="handleMouseOut">
       <div class="menus-body" v-for="(item,index) in cityData" :key="index">
@@ -11,7 +8,7 @@
         </div>
         <!-- 二级菜单 -->
         <div class="item-child" v-if="isShow">
-          <div v-for="(child,index) in childCityData" :key="index" >
+          <div v-for="(child,index) in childCityData" :key="index">
             <p>{{index+1}}</p>
             <nuxt-link :to="`/post?city=${child.city}`">
               <span class="childCity">{{child.city}}</span>
@@ -34,19 +31,10 @@
       </nuxt-link>
     </div>
   </div>
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
 </template>
 
 <script>
 export default {
-<<<<<<< HEAD
-
-}
-</script>
-
-<style>
-
-=======
   data() {
     return {
       childrenShow: "",
@@ -123,8 +111,8 @@ export default {
   background: #fff;
   z-index: 11;
   position: relative;
-}*
-.menus-wrapper .menu-item:nth-child(1) {
+}
+* .menus-wrapper .menu-item:nth-child(1) {
   border-top: 1px solid #ddd;
 }
 .menus-wrapper .menu-item:hover {
@@ -196,5 +184,4 @@ export default {
 .item-child :hover .childDesc {
   border-bottom: 1px solid #999;
 }
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
 </style>

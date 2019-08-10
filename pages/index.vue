@@ -95,10 +95,6 @@ export default {
 
     })
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
 }
 </script>
 <style lang="less" scoped>

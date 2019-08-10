@@ -2,7 +2,6 @@
   <div class="mian">
     <!-- 搜索框 -->
     <div class="search-wrapper">
-<<<<<<< HEAD
       <input type="text" placeholder=" 请输入想去的地方，比如：'广州'" class="search" />
       <i class="el-icon-search"></i>
     </div>
@@ -19,19 +18,16 @@
       <el-button type="primary" icon="el-icon-edit">写游记</el-button>
     </div>
 
-    
-=======
-      <input type="text" placeholder="请输入想去的地方，比如：'广州'" class="search" v-model="search" />
-      <i class="el-icon-search"></i>
-      <!-- 推荐:关键词 -->
-      <div class="search-recommend">
-        <el-row>
-          推荐：
-          <span @click="search='广州'" style="cursor:pointer">广州</span>
-          <span @click="search='上海'" style="cursor:pointer">上海</span>
-          <span @click="search='北京'" style="cursor:pointer">北京</span>
-        </el-row>
-      </div>
+    <input type="text" placeholder="请输入想去的地方，比如：'广州'" class="search" v-model="search" />
+    <i class="el-icon-search"></i>
+    <!-- 推荐:关键词 -->
+    <div class="search-recommend">
+      <el-row>
+        推荐：
+        <span @click="search='广州'" style="cursor:pointer">广州</span>
+        <span @click="search='上海'" style="cursor:pointer">上海</span>
+        <span @click="search='北京'" style="cursor:pointer">北京</span>
+      </el-row>
     </div>
 
     <!-- 推荐攻略 -->
@@ -144,19 +140,13 @@
         </div>
       </div>
     </div>
-<<<<<<< HEAD
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
-=======
+
     <!-- 分页 -->
     <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :total="total"></el-pagination>
->>>>>>> c350fca0c1d9a6168ac3663daf4ef220f348026f
   </div>
 </template>
 
 <script>
-<<<<<<< HEAD
-export default {};
-=======
 export default {
   data() {
     return {
@@ -220,7 +210,7 @@ export default {
   },
   watch: {
     // 把val传过去搜索框
-    search: function(val) {
+    search: function (val) {
       // console.log(val, "监听搜索内容");
       // 如果搜索内容为空,不打开搜索框,获取本地接口数据;如果有输入内容,获取线上100条数据
       if (val == "") {
@@ -241,7 +231,6 @@ export default {
     this.GetPostsList();
   }
 };
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
 </script>
 
 <style scoped lang="less">
@@ -250,18 +239,12 @@ export default {
 }
 .search {
   width: 100%;
-<<<<<<< HEAD
-=======
   padding-left: 20px;
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
   box-sizing: border-box;
   height: 40px;
   line-height: 40px;
   border: 3px solid orange;
-<<<<<<< HEAD
-=======
   outline: none;
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
 }
 .el-icon-search {
   position: absolute;
@@ -277,13 +260,13 @@ export default {
   font-size: 12px;
   color: #666;
 }
-<<<<<<< HEAD
+
 .post-title h1 {
   font-weight: 400;
   font-size: 18px;
   color: orange;
 }
-=======
+
 .post-item {
   margin: 10px 0;
   font-size: 16px;
@@ -348,5 +331,4 @@ a {
   border-bottom: 1px solid #eee;
   margin-bottom: 20px;
 }
->>>>>>> cb43a18bbacb40a802260e6fce6bfb6e447e4c9e
 </style>
