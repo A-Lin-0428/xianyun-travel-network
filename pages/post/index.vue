@@ -2,7 +2,9 @@
   <div class="container">
     <el-row type="flex" justify="space-between">
       <!-- 侧栏 -->
-      <div class="main"></div>
+      <div class="main">
+        <postForm />
+      </div>
 
       <!-- 攻略列表 -->
       <div class="aside">
@@ -14,10 +16,11 @@
 
 <script>
 import postList from "@/components/post/postList";
-
+import postForm from "@/components/post/postForm";
 export default {
   components: {
-    postList
+    postList,
+    postForm
   }
 };
 </script>
@@ -27,12 +30,9 @@ export default {
   width: 1000px;
   margin: 20px auto;
 }
-
 /*aside*/
 .aside {
   width: 700px;
   height: fit-content;
-  // border: 1px #ddd solid;
-  // background: #333;
 }
 </style>

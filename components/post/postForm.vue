@@ -3,14 +3,12 @@
     <div class="meus-header" @mouseleave="handleMouseOut">
       <div class="menus-body" v-for="(item,index) in cityData" :key="index">
         <!-- 一级菜单 -->
-        <!-- <div class="menu-item" @mouseover="childrenShow=index"  @mouseleave="childrenShow=index"> -->
         <div class="menu-item" @mouseover="handleMousEenter(index)">
           <span>{{item.type}}</span>
         </div>
         <!-- 二级菜单 -->
-        <!-- <div class="item-child" v-if="childrenShow===index" @mouseleave="childrenShow=''"> -->
         <div class="item-child" v-if="isShow">
-          <div v-for="(child,index) in childCityData" :key="index">
+          <div v-for="(child,index) in childCityData" :key="index" >
             <p>{{index+1}}</p>
             <nuxt-link :to="`/post?city=${child.city}`">
               <span class="childCity">{{child.city}}</span>
@@ -42,10 +40,9 @@ export default {
       childrenShow: "",
       type: "", // 主题类型
       children: [], // 城市列表分支
-      cityData: [], //用来存储城市列表数据
-
+      cityData: [], //用来存储热门城市列表数据
       recomdata: [], //用来存储推荐文章数据
-      childCityData: [], //用来存储城市列表第二菜单数据
+      childCityData: [], //用来存储热门城市列表第二菜单数据
       isShow: false
     };
   },
@@ -57,7 +54,7 @@ export default {
     handleMouseOut() {
       this.isShow = false;
     },
-    //获取城市菜单列表数据
+    //获取热门城市菜单列表数据
     getCities() {
       this.$axios({
         url: "/posts/cities",
@@ -67,9 +64,8 @@ export default {
           children: [] // 城市列表
         }
       }).then(res => {
-        // console.log(res, "城市菜单");
         this.cityData = res.data.data;
-        console.log(this.cityData, "城市列表数据");
+        console.log(this.cityData, "侧栏热门城市列表数据");
       });
     },
     //获取推荐文章数据
@@ -81,8 +77,8 @@ export default {
           id: "" //Number类型
         }
       }).then(res => {
-        console.log(res, "推荐文章");
         this.recomdata = res.data.data;
+        console.log(this.recomdata, "推荐文章数据");
       });
     }
   },
@@ -115,7 +111,7 @@ export default {
   background: #fff;
   z-index: 11;
   position: relative;
-}
+}*
 .menus-wrapper .menu-item:nth-child(1) {
   border-top: 1px solid #ddd;
 }
@@ -162,7 +158,7 @@ export default {
 .item-child {
   position: absolute;
   top: 0;
-  width: 300px;
+  width: 350px;
   padding: 10px 20px;
   left: 100%;
   margin-left: -1px;
