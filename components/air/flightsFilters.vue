@@ -71,10 +71,10 @@ export default {
     }
   },
   methods: {
-    // 选择起飞机场123
+    // 选择起飞机场
     handleAirports(value) {
       // console.log(value)
-      // 筛选出符合要求
+      // 筛选出符合要求,然后返回
       const arr = this.data.flights.filter(val => {
         return val.org_airport_name == value
       })
