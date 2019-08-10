@@ -13,7 +13,7 @@ export default {
     window.onLoad = function () {
       var map = new AMap.Map('container', {
         resizeEnable: true,
-        center: [116.397428, 39.90923],
+        center: [118.8718107, 31.32846821],
         zoom: 13
       });
       var marker = new AMap.Marker({

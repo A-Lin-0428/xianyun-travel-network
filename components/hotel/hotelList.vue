@@ -5,7 +5,7 @@
         type="flex"
         :gutter="30"
         justiy="space-between"
-        v-for="(item,index) in hotelInfo"
+        v-for="(item,index) in data"
         :key="index"
       >
         <el-col :span="8">
@@ -84,34 +84,21 @@
 </template>
 <script>
 export default {
+  props: {
+    data: {
+      type: Array,
+      default: () => { }
+    }
+  },
   data() {
     return {
       grade: 4.5,
-      hotelInfo: [],
       hotelSearch: {
         city: ''
 
       }
     }
   },
-  // },
-  watch: {
-    // 监视url的变化,并获取到城市id
-    $route() {
-
-      // 获取到城市id
-      const { city } = this.$route.query
-      //  发送请求，获取该城市下的酒店详情
-      this.$axios({
-        url: '/hotels',
-        params: { city }
-      }).then(res => {
-        this.hotelInfo = res.data.data
-        // console.log(this.hotelInfo)
-
-      })
-    },
-  }
 }
 
 </script>

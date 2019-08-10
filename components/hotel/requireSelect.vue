@@ -46,12 +46,12 @@
         <el-row :gutter="20">
           <el-col :span="8">每间</el-col>
           <el-col :span="8">
-            <el-select v-model="adultNum" :value="adultArr[1]" placeholder="请选择">
+            <el-select v-model="adultNum" placeholder="请选择" @change="adultNumSubmit">
               <el-option v-for="(item,index) in adultArr" :key="index" :label="item" :value="item"></el-option>
             </el-select>
           </el-col>
           <el-col :span="8">
-            <el-select v-model="childNum" placeholder="请选择">
+            <el-select v-model="childNum" placeholder="请选择" @change="childNumSubmit">
               <el-option v-for="(item,index) in [1,2,3,4]" :key="index" :label="item" :value="item"></el-option>
             </el-select>
           </el-col>
@@ -98,8 +98,6 @@ export default {
         // console.log(res)
         const { data } = res.data
 
-        // 如用户没有点击选中，直接默认选中第一个
-        this.destination = data[0].name
         // 循环数组，给每一项数据添加一个value属性
         const newDate = []
 
@@ -109,7 +107,6 @@ export default {
         });
         cb(newDate)
       })
-
     },
     // select 点击选中建议项时触发
     handleCitySelect(item) {
@@ -124,12 +121,24 @@ export default {
       }
       )
     },
+
+    // 入住成人选中时候触发
+    adultNumSubmit(val) {
+
+      this.adultNum = `${val}成人`
+    },
+    // 入住儿童选中人数的时候触发
+    childNumSubmit(val) {
+
+      this.childNum = `${val}儿童`
+    },
     //  点击人员数量确定时候触发
     handleSumbit() {
       //  收回弹窗
       this.isShow = false
-
-    }
+      //  将获取到儿童人数和成人人数赋值给input标签
+      this.persons = `${this.adultNum}` + `${this.childNum}`
+    },
   }
 }
 </script>

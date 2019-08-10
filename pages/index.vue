@@ -30,8 +30,12 @@
 
         <!-- 输入框 -->
         <el-row type="flex" align="middle" class="search-input">
-          <input :placeholder="content[current].placeholder" v-model="searchValue" />
-          <i class="el-icon-search"></i>
+          <input
+            :placeholder="content[current].placeholder"
+            v-model="searchValue"
+            @keyup.enter="searchSubmit"
+          />
+          <i class="el-icon-search" @click="searchSubmit"></i>
         </el-row>
       </div>
     </div>
@@ -60,6 +64,22 @@ export default {
         this.$router.push('/air')
       }
       this.current = index
+    },
+    // 点击搜索，跳转到指定的页面
+    searchSubmit() {
+      // console.log(123)
+      if (this.current == 0) {
+        this.$router.push({
+          path: '/post',
+          query: { city: this.searchValue }
+        })
+      } else if (this.current == 1) {
+        this.$router.push({
+          path: '/hotel',
+          query: { city: this.searchValue }
+        })
+      }
+
     }
   },
   mounted() {
@@ -75,6 +95,7 @@ export default {
 
     })
   }
+
 }
 </script>
 <style lang="less" scoped>

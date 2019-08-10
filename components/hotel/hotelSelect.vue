@@ -4,9 +4,9 @@
       <el-col :span="6">
         <el-row type="flex" justify="space-between">
           <span>价格</span>
-          <span>0-4000</span>
+          <span>0-{{price}}</span>
         </el-row>
-        <el-slider v-model="price"></el-slider>
+        <el-slider v-model="price" :max="4000" @change="handlePrice"></el-slider>
       </el-col>
       <el-col :span="18">
         <el-row type="flex">
@@ -38,12 +38,13 @@
               style="margin-left: 20px;"
               placeholder="不限"
               class="clearborder"
+              @change="handleStyle"
             >
               <el-option
                 v-for="(item,index) in hotelSelect.types"
                 :key="index"
                 :label="item.name"
-                :value="item.id"
+                :value="item.name"
               ></el-option>
             </el-select>
           </el-col>
@@ -90,16 +91,24 @@
 </template>
 <script>
 export default {
+  props: {
+    Info: {
+      type: Array,
+      default: () => { }
+    }
+  },
   data() {
     return {
       // 选定后，双向绑定保存的数据
-      price: '',
+      price: 4000,
       hotelStar: '',
       hotelStyle: '',
       hotelServe: '',
       hotelBrand: '',
       // 获取酒店选项，保存的数据
       hotelSelect: {}
+      // 保存筛选hotels数据的请求
+
     }
   },
   mounted() {
@@ -111,6 +120,23 @@ export default {
       // console.log(res.data.data)
       this.hotelSelect = res.data.data
     })
+  },
+  methods: {
+    //移动价格区间的时候触发
+    handlePrice(val) {
+      // 获取到的val就会移动的值
+      // console.log(val)
+      const arr = this.Info.filter(v => {
+        return v.price < val
+      })
+      this.$emit('getFliterHotel', arr)
+
+    },
+    // 筛选酒店类型
+    handleStyle(val) {
+      //  val是数组
+
+    }
   }
 }
 </script>

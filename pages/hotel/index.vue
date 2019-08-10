@@ -19,10 +19,10 @@
     </el-row>
 
     <!-- 酒店要求 -->
-    <HotelSelect />
+    <HotelSelect :Info="cacheHotelInfo" @getFliterHotel="getFliterHotel" />
 
     <!-- 各大品牌酒店明细 -->
-    <HotelList />
+    <HotelList :data="hotelInfo" />
 
     <!-- 下一页的结构 -->
     <div class="nextPage">
@@ -46,16 +46,56 @@ export default {
   },
   data() {
     return {
-      CityInfo: {}
+      CityInfo: {},
+      cacheHotelInfo: [],
+      hotelInfo: [],
+      CityId: ''
     }
   },
   methods: {
     //  通过事件接收addressShow下来的数据
     getCityInfo(item) {
-      // console.log(item)
+      console.log(item)
       this.CityInfo = item
+    },
+    // 获取筛选后的数据
+    getFliterHotel(arr) {
+      // 刷新数据
+      this.hotelInfo = arr
     }
+  },
+  // watch: {
+  //   immediate: true,
+  //   // 监视url的变化,并获取到城市id
+  //   $route() {
+  //     // 获取到城市id
+  //     const { city } = this.$route.query
+  //     this.$route({
+  //       url: '/hotels',
+  //       params: { city }
+  //     }).then(res => {
+  //       console.log(res)
+  //     })
+  //   }
+  // }
+  mounted() {
+    //  根据id，获取城市信息
+    // 自动拼接url
+    this.$router.push({ query: { city: 74 } })
+    // 发送请求
+    this.$axios({
+      url: '/hotels',
+      params: { city: this.$route.query.city }
+    }).then(res => {
+      // console.log(res)
+
+      this.hotelInfo = res.data.data
+
+      // 缓存一个总数据
+      this.cacheHotelInfo = [...res.data.data]
+    })
   }
+
 }
 </script>
 
