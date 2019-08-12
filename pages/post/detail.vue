@@ -1,6 +1,6 @@
 <template>
   <div class="aa">
-    <el-row type="flex" justify="space-between">
+    <el-row type="flex" justify="space-between" :gutter="20">
       <div class="strategy-left">
         <!-- 文章详情组件 -->
         <Postdetail :data="postDetail" />
@@ -9,7 +9,7 @@
       </div>
 
       <div class="strategy-right">
-        <h4>相关攻略</h4>
+        <RelatedStrategy />
       </div>
     </el-row>
   </div>
@@ -18,9 +18,10 @@
 // 引用组件
 import Postdetail from '@/components/post/postdetail'
 import Postcomment from '@/components/post/postcomment'
+import RelatedStrategy from '@/components/post/relatedStrategy'
 export default {
   components: {
-    Postdetail, Postcomment
+    Postdetail, Postcomment, RelatedStrategy
   },
   data() {
     return {
@@ -46,11 +47,11 @@ export default {
 .aa {
   width: 1000px;
   margin: 0 auto;
+  padding-top: 10px;
 }
 // 攻略左边开始
 .strategy-left {
   width: 700px;
-  margin-right: 0;
 }
 
 .strategy-left span {

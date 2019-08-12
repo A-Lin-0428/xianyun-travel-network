@@ -59,7 +59,6 @@ export default {
 <style lang="less" scoped>
 .pinglun {
   width: 700px;
-  margin-left: 250px;
 }
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
