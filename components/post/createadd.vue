@@ -1,42 +1,69 @@
 <template>
-<div class="container">
-  <div class="left">
-    <span>发表新攻略</span>
-    <p>分享你的个人游记,让更多人看到你哦！</p>
-  </div>
-  <el-row>
-    <el-input v-model="input" placeholder="请输入标题" class="List">
-    </el-input>
-    <div class="scntainers" xmlns:v-quill="富文本编辑器">
-      <div class="quill-editor" :content="content" @change="onEditorChange($event)" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" v-quill:myQuillEditor="editorOption">
-
-      </div>
+  <div class="container">
+    <div class="left">
+      <span>发表新攻略</span>
+      <p>分享你的个人游记,让更多人看到你哦！</p>
     </div>
-    <div class="el-form-item__content">
-      <div data-v-a7cc81fa="" class="el-form-item"><label class="el-form-item__label">选择城市</label>
-        <div class="el-form-item__content">
-          <div data-v-a7cc81fa="" aria-haspopup="listbox" role="combobox" aria-owns="el-autocomplete-3440" class="el-autocomplete el-autocomplete" aria-expanded="true">
-            <div class="el-input">
-              <!----><input type="text" placeholder="请搜索游玩城市" fetchsuggestions="function () { [native code] }" triggeronfocus="true" debounce="300" placement="bottom-start" popperappendtobody="true" class="el-input__inner" role="textbox" aria-autocomplete="list" aria-controls="id" aria-activedescendant="el-autocomplete-3440-item--1">
-              <!---->
-              <!---->
-              <!---->
+    <el-row>
+      <el-input v-model="input" placeholder="请输入标题" class="List"></el-input>
+      <div class="scntainers" xmlns:v-quill="富文本编辑器">
+        <div
+          class="quill-editor"
+          :content="content"
+          @change="onEditorChange($event)"
+          @blur="onEditorBlur($event)"
+          @focus="onEditorFocus($event)"
+          @ready="onEditorReady($event)"
+          v-quill:myQuillEditor="editorOption"
+        ></div>
+      </div>
+      <div class="el-form-item__content">
+        <div data-v-a7cc81fa class="el-form-item">
+          <label class="el-form-item__label">选择城市</label>
+          <div class="el-form-item__content">
+            <div
+              data-v-a7cc81fa
+              aria-haspopup="listbox"
+              role="combobox"
+              aria-owns="el-autocomplete-3440"
+              class="el-autocomplete el-autocomplete"
+              aria-expanded="true"
+            >
+              <div class="el-input">
+                <!---->
+                <input
+                  type="text"
+                  placeholder="请搜索游玩城市"
+                  fetchsuggestions="function () { [native code] }"
+                  triggeronfocus="true"
+                  debounce="300"
+                  placement="bottom-start"
+                  popperappendtobody="true"
+                  class="el-input__inner"
+                  role="textbox"
+                  aria-autocomplete="list"
+                  aria-controls="id"
+                  aria-activedescendant="el-autocomplete-3440-item--1"
+                />
+                <!---->
+                <!---->
+                <!---->
+              </div>
             </div>
+            <!---->
           </div>
-          <!---->
         </div>
+        <!---->
       </div>
-      <!---->
-    </div>
-    <div class="right">
-      <el-button class="anl" type="primary" @click="handleanl">发布</el-button>
-      <span>或者<a href="javacript:;"> 保存到草稿</a></span>
-
-    </div>
-
-  </el-row>
-
-</div>
+      <div class="right">
+        <el-button class="anl" type="primary" @click="handleanl">发布</el-button>
+        <span>
+          或者
+          <a href="javacript:;">保存到草稿</a>
+        </span>
+      </div>
+    </el-row>
+  </div>
 </template>
 
 <script>
@@ -68,7 +95,7 @@ export default {
             //  ["clean"], // 清除文本格式
             ["link", "image", "video"] // 链接、图片、视频
           ],
-        
+
         }
       }
     }
@@ -101,23 +128,23 @@ export default {
       this.content = html
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      // console.log(file, fileList);
     },
     handlePreview(file) {
-      console.log(file);
+      // console.log(file);
     },
     // 提交
     handleanl() {
       this.$axios({
-          url: '/upload',
-          method: 'GET',
-          params,
-        })
+        url: '/upload',
+        method: 'GET',
+        params,
+      })
         .then(function (res) {
-          console.log(res);
+          // console.log(res);
         })
         .catch(function (error) {
-          console.log(error);
+          // console.log(error);
         });
     }
 
@@ -143,7 +170,6 @@ export default {
       font-size: 12px;
       color: #ccc;
     }
-
   }
 
   .List {
@@ -151,7 +177,6 @@ export default {
   }
 
   .containers {
-
     width: 70%;
 
     max-width: 700px;
@@ -159,9 +184,6 @@ export default {
     margin: 0 auto;
 
     padding: 30px 0;
-
-    ;
-
   }
 
   .quill-editor {
@@ -184,9 +206,7 @@ export default {
     a {
       font-size: 12px;
       color: #ff9f00;
-
     }
   }
-
 }
 </style>

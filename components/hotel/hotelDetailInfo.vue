@@ -16,13 +16,8 @@
       <el-col :span="4">主要设施</el-col>
       <el-col :span="20">
         <!-- 通过设置effect属性来改变主题，默认为 light -->
-         <el-tag
-          type='info'
-          v-for="(item,index) in data.hotelassets"
-          :key="index"
-
-        >{{item.name}}</el-tag> 
-     </el-col> 
+        <el-tag type="info" v-for="(item,index) in data.hotelassets" :key="index">{{item.name}}</el-tag>
+      </el-col>
     </el-row>
     <el-row class="stop pad">
       <el-col :span="4">停车服务</el-col>
@@ -32,30 +27,30 @@
     </el-row>
     <el-row class="brand pad">
       <el-col :span="4">品牌信息</el-col>
-      <el-col :span="20"> 
-      <span>{{data.hotelbrand.name||'-'}}</span> 
-       </el-col> 
+      <el-col :span="20">
+        <span>{{data.hotelbrand.name||'-'}}</span>
+      </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
 export default {
-  props:{
-    data:{
-      type:Object,
-      default:{}
+  props: {
+    data: {
+      type: Object,
+      default: {}
     }
   },
   data() {
     return {
-      
+
     };
   },
-  mounted(){
-    setTimeout(()=> {
-      console.log(this.data)
-    },1000)
+  mounted() {
+    setTimeout(() => {
+      // console.log(this.data)
+    }, 1000)
   }
 
 };

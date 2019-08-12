@@ -142,6 +142,9 @@ export default {
       const newArr = this.Info.filter(item => {
         let pass = true;
         val.forEach(v => {
+          if (item.hotellevel == []) {
+            retrun
+          }
           // 满足每个数据的值和过滤条件的值相等
           if (item.hotellevel.name !== v) {
             pass = false
