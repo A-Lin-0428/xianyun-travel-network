@@ -1,8 +1,13 @@
 <template>
   <div class="aa">
     <el-row type="flex" justify="space-between">
-      <!-- 文章详情组件 -->
-      <Postdetail :data="postDetail" />
+      <div class="strategy-left">
+        <!-- 文章详情组件 -->
+        <Postdetail :data="postDetail" />
+        <!-- 评论详情组件 -->
+        <Postcomment />
+      </div>
+
       <div class="strategy-right">
         <h4>相关攻略</h4>
       </div>
@@ -12,9 +17,10 @@
 <script>
 // 引用组件
 import Postdetail from '@/components/post/postdetail'
+import Postcomment from '@/components/post/postcomment'
 export default {
   components: {
-    Postdetail
+    Postdetail, Postcomment
   },
   data() {
     return {
