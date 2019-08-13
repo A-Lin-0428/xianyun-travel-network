@@ -9,14 +9,18 @@
         :key="index"
       >
         <el-col :span="8">
-          <div class="img">
-            <img :src="item.photos" alt />
-          </div>
+          <nuxt-link :to="`/hotel/${item.id}.html`">
+            <div class="img">
+              <img :src="item.photos" alt />
+            </div>
+          </nuxt-link>
         </el-col>
         <el-col :span="16">
           <el-row>
             <el-col :span="16">
-              <p style="font-size:22px">{{item.name}}</p>
+              <p style="font-size:22px">
+                <nuxt-link :to="`/hotel/${item.id}.html`">{{item.name}}</nuxt-link>
+              </p>
               <p style="color:#999999">
                 <span>{{item.alias}}</span>
                 <span class="activeColor">
@@ -59,22 +63,6 @@
                   </span>
                 </el-row>
               </nuxt-link>
-              <!-- <nuxt-link to="#">
-                <el-row type="flex" justify="space-between">
-                  <span>艺龙</span>
-                  <span>
-                    <i class="activeColor">￥115</i>起 >
-                  </span>
-                </el-row>
-              </nuxt-link>
-              <nuxt-link to="#">
-                <el-row type="flex" justify="space-between">
-                  <span>Hotels.com</span>
-                  <span>
-                    <i class="activeColor">￥162</i>起 >
-                  </span>
-                </el-row>
-              </nuxt-link>-->
             </el-col>
           </el-row>
         </el-col>
@@ -99,6 +87,9 @@ export default {
       }
     }
   },
+  mounted() {
+    console.log(this.data)
+  }
 }
 
 </script>

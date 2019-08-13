@@ -28,18 +28,32 @@ export default {
       postDetail: []
     }
   },
+  methods: {
+    // 文章详情页面数据渲染
+    getPostDetail() {
+      // 根据id，获取攻略详情
+      const { id } = this.$route.query
+      // console.log(id)
+      this.$axios({
+        url: '/posts',
+        method: 'GET',
+        params: { id }
+      }).then(res => {
+        // console.log(res)
+        this.postDetail = res.data.data
+      })
+    }
+  },
   mounted() {
-    // 根据id，获取攻略详情
-    const { id } = this.$route.query
-    // console.log(id)
-    this.$axios({
-      url: '/posts',
-      method: 'GET',
-      params: { id }
-    }).then(res => {
-      // console.log(res)
-      this.postDetail = res.data.data
-    })
+    //  文章详情数据初始化
+    this.getPostDetail()
+  },
+  watch: {
+    // 当子组件中的id发生变化时候，数据需要重新渲染
+    $route() {
+      // 数据重新重新渲染
+      this.getPostDetail()
+    }
   }
 };
 </script>
