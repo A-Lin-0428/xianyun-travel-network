@@ -6,6 +6,7 @@
         <Postdetail :data="postDetail" />
         <!-- 评论详情组件 -->
         <Postcomment />
+        <PostCommentList />
       </div>
 
       <div class="strategy-right">
@@ -18,10 +19,11 @@
 // 引用组件
 import Postdetail from '@/components/post/postdetail'
 import Postcomment from '@/components/post/postcomment'
+import PostCommentList from '@/components/post/postCommentList'
 import RelatedStrategy from '@/components/post/relatedStrategy'
 export default {
   components: {
-    Postdetail, Postcomment, RelatedStrategy
+    Postdetail, Postcomment, RelatedStrategy, PostCommentList
   },
   data() {
     return {

@@ -1,98 +1,203 @@
 <template>
-  <div class="pinglun">
-    <h4>评论</h4>
-    <el-input type="textarea" :rows="2" placeholder="说两句咯!" v-model="textarea"></el-input>
-    <div class="el-div">
+  <div class="detailcomment">
+    <p class="title" ref="title">评论</p>
+    <!-- 回复按钮 -->
+    <el-tag
+      v-if="ryuser.id"
+      class="replybtn"
+      :disable-transitions="true"
+      size="medium"
+      @close="cancelreply"
+      closable
+      type="info"
+    >
+      <span>回复 @{{ryuser.nickname}}</span>
+    </el-tag>
+    <!-- 文本域 -->
+    <el-input
+      ref="textarea"
+      type="textarea"
+      placeholder="说点什么吧..."
+      v-model="form.content"
+      resize="none"
+      :show-word-limit="true"
+      maxlength="50"
+    ></el-input>
+    <!-- 图片和提交按钮 -->
+    <el-row type="flex" justify="space-between" class="upload">
       <el-upload
+        :on-success="upsuccess"
+        :headers="headers"
+        :multiple="true"
         class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
+        action="http://127.0.0.1:1337/upload"
+        :before-upload="beforeupload"
       >
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
-      <el-button class="el-button" :plain="true" @click="open2">提交评论</el-button>
-    </div>
-    <div class="block">
-      <span class="demonstration"></span>
-      <el-pagination layout="prev, pager, next" :total="1000"></el-pagination>
-    </div>
+      <el-button class="submit" type="primary" size="mini" @click="subcomment">提交</el-button>
+    </el-row>
   </div>
 </template>
+
 <script>
 export default {
+  props: {
+    // 评论按钮
+    tocommentpositioninfo: {
+      type: String,
+      default: ""
+    },
+    // 回复用户
+    replyuser: {
+      type: Object,
+      default: () => { }
+    }
+  },
   data() {
     return {
-      textarea: ""
+      ryuser: {},
+      // 回复按钮状态
+      replybtnstate: false,
+      // 图片上传请求头
+      headers: {},
+      imageUrl: "",
+      form: {
+        content: "",
+        pics: [],
+        post: 0
+      }
     };
   },
-
   methods: {
-    open2() {
-      // 评论
-      this.$message({
-        message: "评论成功!",
-        type: "success",
-        imageUrl: ""
-      });
+    // 取消回复
+    cancelreply() {
+      this.replybtnstate = false;
+      this.ryuser = {};
     },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+    // 上传成功
+    upsuccess() {
+      console.log("uploadsuccess");
     },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
+    // 提交评论
+    subcomment() {
+      // 判断是否为空
+      if (!this.form.content.trim()) {
+        this.$emit("success", "");
+        return this.$message.warning("内容不能为空");
+      }
+      // 判断是否回复
+      if (this.ryuser.id) this.form.follow = this.ryuser.ryid;
+      this.form.post = this.$route.query.id;
+      var data = this.form;
+      // 发送请求
+      this.$axios({
+        url: '/comments',
+        method: 'POST',
+        headers: { Authorization: `Bearer ${this.$store.state.user.userInfo.token}` },
+        data
+      }).then(res => {
+        // console.log(res)
+        if (res.data.message === "提交成功") {
+          //  清空数据
+          this.form.content = "",
+            this.form.pics = [],
+            this.replybtnstate = false;
+          this.$emit("success", "ok")
+        }
+      })
+    },
+    // 文件上传前
+    beforeupload(file) {
+      if (!this.$store.state.user.userInfo.token) {
+        this.$message.warning("请先登录，正在跳转。。。");
+        this.$router.push({ path: "/user?form=login" });
+        return false;
+      }
+      this.headers = {
+        Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+      };
+    },
+    // 定义到评论位置
+    commentposition() {
+      document.documentElement.scrollTop = this.$refs.title.offsetTop;
+      document.body.scrollTop = this.$refs.title.offsetTop;
+      this.$refs.textarea.focus();
+    }
+  },
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+  // 侦听
+  watch: {
+    // 回复评论用户信息
+    replyuser: {
+      deep: true,
+      handler(n, o) {
+        if (!n.id) return;
+        this.ryuser = n;
+        this.$emit("gryuserinfo", "OK");
+        this.replybtnstate = true;
+        this.commentposition();
       }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
+    },
+    // 侦听评论按钮
+    tocommentpositioninfo(n, o) {
+      if (!(n === "OK")) return;
+      this.commentposition();
+      this.$emit("replytocommentposition", "OK");
     }
   }
 };
 </script>
-<style lang="less" scoped>
-.pinglun {
-  width: 700px;
-}
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-/deep/ .el-icon-plus {
-  border: 1px solid #409eff;
-}
-.el-div {
-  display: flex;
-}
-.el-button {
-  margin-left: 420px;
-  height: 50px;
+
+<style lang='less' scoped>
+.detailcomment {
+  // 标题
+  .title {
+    margin-bottom: 22px;
+    font-size: 18px;
+    color: #333;
+  }
+  // 回复
+  /deep/ .replybtn {
+    margin-bottom: 8px;
+    span {
+      font-size: 12px;
+    }
+  }
+  // 图片上传和提交按钮
+  // 图片上传
+  /deep/ .upload {
+    margin-top: 10px;
+    .avatar-uploader .el-upload {
+      background-color: #fbfdff;
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+      border-color: #409eff;
+    }
+    .avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 100px;
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
+    }
+    .avatar {
+      width: 100px;
+      height: 100px;
+      display: block;
+    }
+  }
+  //   提交按钮
+  .submit {
+    margin-top: 2px;
+    height: 27px;
+  }
 }
 </style>
-
-

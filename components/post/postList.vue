@@ -1,98 +1,145 @@
 <template>
   <div class="container">
-    <el-row type="flex" justify="space-between">
-      <!-- 左侧:级联菜单栏 -->
-      <div class="main">
-        <div class="menus-wrapper">
-          <div class="meus-header" @mouseleave="handleMouseOut">
-            <div class="menus-body" v-for="(item,index) in cityData" :key="index">
-              <!-- 一级菜单 -->
-              <div class="menu-item" @mouseover="handleMousEenter(index)">
-                <span>{{item.type}}</span>
-              </div>
-              <!-- 二级菜单 -->
-              <div class="item-child" v-if="isShow">
-                <div v-for="(child,index) in childCityData" :key="index">
-                  <p>{{index+1}}</p>
-                  <nuxt-link :to="`/post?city=${child.city}`">
-                    <span
-                      class="childCity"
-                      @click="search=`${child.city}`"
-                      style="cursor:pointer"
-                    >{{child.city}}</span>
-                  </nuxt-link>
-                  <nuxt-link :to="`/post?city=${child.city}`">
-                    <span
-                      class="childDesc"
-                      @click="search=`${child.city}`"
-                      style="cursor:pointer"
-                    >{{child.desc}}</span>
-                  </nuxt-link>
-                </div>
+     <el-row type="flex" justify="space-between">
+    <!-- 左侧:级联菜单栏 -->
+    <div class="main">
+      <div class="menus-wrapper">
+        <div class="meus-header" @mouseleave="handleMouseOut">
+          <div class="menus-body" v-for="(item,index) in cityData" :key="index">
+            <!-- 一级菜单 -->
+            <div class="menu-item" @mouseover="handleMousEenter(index)">
+              <span>{{item.type}}</span>
+            </div>
+            <!-- 二级菜单 -->
+            <div class="item-child" v-if="isShow">
+              <div v-for="(child,index) in childCityData" :key="index">
+                <p>{{index+1}}</p>
+                <nuxt-link :to="`/post?city=${child.city}`">
+                  <span class="childCity"  @click="search=`${child.city}`" style="cursor:pointer">{{child.city}}</span>
+                </nuxt-link>
+                <nuxt-link :to="`/post?city=${child.city}`">
+                  <span class="childDesc"  @click="search=`${child.city}`" style="cursor:pointer">{{child.desc}}</span>
+                </nuxt-link>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="aside-recommend">
-            <h4 class="aside-title">推荐城市</h4>
-            <nuxt-link to class="aside-img">
-              <img
-                src="http://p1-q.mafengwo.net/s11/M00/B4/92/wKgBEFt6ZqaAJeK7AAbj58wpNlY06.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
-                alt
-              />
-            </nuxt-link>
-          </div>
+        <div class="aside-recommend">
+          <h4 class="aside-title">推荐城市</h4>
+          <nuxt-link to class="aside-img">
+            <img
+              src="http://p1-q.mafengwo.net/s11/M00/B4/92/wKgBEFt6ZqaAJeK7AAbj58wpNlY06.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
+              alt
+            />
+          </nuxt-link>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧:旅游攻略列表 -->
+    <div class="aside">
+      <!-- 搜索框 -->
+      <div class="search-wrapper">
+        <input type="text" placeholder="请输入想去的地方，比如：'广州'" class="search" v-model="search" />
+        <i class="el-icon-search"></i>
+        <!-- 推荐:关键词 -->
+        <div class="search-recommend">
+          <el-row>
+            推荐：
+            <span @click="search='广州'" style="cursor:pointer">广州</span>
+            <span @click="search='上海'" style="cursor:pointer">上海</span>
+            <span @click="search='北京'" style="cursor:pointer">北京</span>
+          </el-row>
         </div>
       </div>
 
-      <!-- 右侧:旅游攻略列表 -->
-      <div class="aside">
-        <!-- 搜索框 -->
-        <div class="search-wrapper">
-          <input type="text" placeholder="请输入想去的地方，比如：'广州'" class="search" v-model="search" />
-          <i class="el-icon-search"></i>
-          <!-- 推荐:关键词 -->
-          <div class="search-recommend">
-            <el-row>
-              推荐：
-              <span @click="search='广州'" style="cursor:pointer">广州</span>
-              <span @click="search='上海'" style="cursor:pointer">上海</span>
-              <span @click="search='北京'" style="cursor:pointer">北京</span>
+      <!-- 推荐攻略 -->
+      <el-row type="flex" justify="space-between" align="middle" class="post-title">
+        <h1>推荐攻略</h1>
+        <nuxt-link to="/post/create">
+          <el-button type="primary" icon="el-icon-edit">写游记</el-button>
+        </nuxt-link>
+      </el-row>
+
+      <!-- 攻略列表 -->
+      <div class="postList" v-for="(item,index) in list" :key="index">
+        <!-- 当index不等于1的时候用下面这串结构 -->
+        <div v-if="index !==1">
+          <el-row type="flex" justify="space-between" class="post-item" align="middle">
+            <h3>
+              <nuxt-link to="/post/detail?id=4">
+                <div v-html="item.title"></div>
+              </nuxt-link>
+            </h3>
+          </el-row>
+          <el-row type="flex" justify="space-between" class="post-desc">
+            <nuxt-link to="/post/detail?id=4">{{item.summary}}</nuxt-link>
+          </el-row>
+          <el-row class="card-images" type="flex" justify="space-between">
+            <nuxt-link to="/post/detail?id=4">
+              <img
+                v-for="(items,index) in item.images"
+                :key="index"
+                :src="items"
+                v-show="index < 3"
+              />
+            </nuxt-link>
+          </el-row>
+          <!-- 用户信息栏 -->
+          <div class="post-info" type="flex" justify="space-between">
+            <!-- 左边 -->
+            <el-row class="post-info-left">
+              <el-col :span="2">
+                <span>
+                  <i class="el-icon-location-outline" style="width:65px;">{{item.cityName}}</i>
+                </span>
+              </el-col>
+              <el-row class="post-user" type="flex" justify="space-between">
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by</span>
+                <el-col :span="2">
+                  <nuxt-link to="/post/detail?id=4">
+                    <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" />
+                  </nuxt-link>
+                </el-col>
+                <nuxt-link class="post-username" to>{{item.account.nickname}}</nuxt-link>
+                <el-col>
+                  <span>
+                    &nbsp;&nbsp;
+                    <i class="el-icon-view">{{item.watch}}</i>
+                  </span>
+                </el-col>
+                <!-- 右边 点赞 -->
+                <el-col :span="4">
+                  <span class="post-info-right">{{item.like}}</span>
+                </el-col>
+              </el-row>
             </el-row>
           </div>
         </div>
 
-        <!-- 推荐攻略 -->
-        <el-row type="flex" justify="space-between" align="middle" class="post-title">
-          <h1>推荐攻略</h1>
-          <nuxt-link to="/post/create">
-            <el-button type="primary" icon="el-icon-edit">写游记</el-button>
-          </nuxt-link>
-        </el-row>
-
-        <!-- 攻略列表 -->
-        <div class="postList" v-for="(item,index) in list" :key="index">
-          <!-- 当index不等于1的时候用下面这串结构 -->
-          <div v-if="index !==1">
+        <!-- 当index等于1的时候用下面这串结构 -->
+        <div v-if="index==1" class="postList1">
+          <el-row class="card-images" type="flex" justify="space-between">
+            <nuxt-link to="/post/detail?id=4">
+              <img
+                v-for="(items,index) in item.images"
+                :key="index"
+                :src="items"
+                v-show="index < 1"
+              />
+            </nuxt-link>
+          </el-row>
+          <div>
             <el-row type="flex" justify="space-between" class="post-item" align="middle">
               <h3>
-                <nuxt-link :to="`/post/detail?id=${item.id}`">
+                <nuxt-link to="/post/detail?id=4">
                   <div v-html="item.title"></div>
                 </nuxt-link>
               </h3>
             </el-row>
             <el-row type="flex" justify="space-between" class="post-desc">
-              <nuxt-link :to="`/post/detail?id=${item.id}`">{{item.summary}}</nuxt-link>
-            </el-row>
-            <el-row class="card-images" type="flex" justify="space-between">
-              <nuxt-link :to="`/post/detail?id=${item.id}`">
-                <img
-                  v-for="(items,index) in item.images"
-                  :key="index"
-                  :src="items"
-                  v-show="index < 3"
-                />
-              </nuxt-link>
+              <nuxt-link to="/post/detail?id=4">{{item.summary}}</nuxt-link>
             </el-row>
             <!-- 用户信息栏 -->
             <div class="post-info" type="flex" justify="space-between">
@@ -125,71 +172,16 @@
               </el-row>
             </div>
           </div>
-
-          <!-- 当index等于1的时候用下面这串结构 -->
-          <div v-if="index==1" class="postList1">
-            <el-row class="card-images" type="flex" justify="space-between">
-              <nuxt-link :to="`/post/detail?id=${id}`">
-                <img
-                  v-for="(items,index) in item.images"
-                  :key="index"
-                  :src="items"
-                  v-show="index < 1"
-                />
-              </nuxt-link>
-            </el-row>
-            <div>
-              <el-row type="flex" justify="space-between" class="post-item" align="middle">
-                <h3>
-                  <nuxt-link :to="`/post/detail?id=${item.id}`">
-                    <div v-html="item.title"></div>
-                  </nuxt-link>
-                </h3>
-              </el-row>
-              <el-row type="flex" justify="space-between" class="post-desc">
-                <nuxt-link :to="`/post/detail?id=${item.id}`">{{item.summary}}</nuxt-link>
-              </el-row>
-              <!-- 用户信息栏 -->
-              <div class="post-info" type="flex" justify="space-between">
-                <!-- 左边 -->
-                <el-row class="post-info-left">
-                  <el-col :span="2">
-                    <span>
-                      <i class="el-icon-location-outline" style="width:65px;">{{item.cityName}}</i>
-                    </span>
-                  </el-col>
-                  <el-row class="post-user" type="flex" justify="space-between">
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by</span>
-                    <el-col :span="2">
-                      <nuxt-link to="/post/detail?id=4">
-                        <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" />
-                      </nuxt-link>
-                    </el-col>
-                    <nuxt-link class="post-username" to>{{item.account.nickname}}</nuxt-link>
-                    <el-col>
-                      <span>
-                        &nbsp;&nbsp;
-                        <i class="el-icon-view">{{item.watch}}</i>
-                      </span>
-                    </el-col>
-                    <!-- 右边 点赞 -->
-                    <el-col :span="4">
-                      <span class="post-info-right">{{item.like}}</span>
-                    </el-col>
-                  </el-row>
-                </el-row>
-              </div>
-            </div>
-          </div>
         </div>
-        <!-- 分页 -->
-        <el-pagination
-          layout="prev, pager, next"
-          @current-change="handleCurrentChange"
-          :total="total"
-        ></el-pagination>
       </div>
-    </el-row>
+      <!-- 分页 -->
+      <el-pagination
+        layout="prev, pager, next"
+        @current-change="handleCurrentChange"
+        :total="total"
+      ></el-pagination>
+    </div>
+     </el-row>
   </div>
 </template>
 
@@ -201,7 +193,6 @@ export default {
       list: "",
       total: null,
       page: 0,
-      id: '',
       searchShow: false,
       //侧栏
       childrenShow: "",
@@ -214,8 +205,6 @@ export default {
     };
   },
   methods: {
-    //右侧功能
-    //分页
     handleCurrentChange(val) {
       this.page = val;
     },
@@ -263,11 +252,8 @@ export default {
         this.list = list.data.data;
         this.total = list.data.total;
         console.log("总100条接口", this.list);
-        // this.id = list.data.data.id
-        // console.log(id)
       });
     },
-    //左侧功能
     //鼠标移入
     handleMousEenter(index) {
       this.isShow = true;
@@ -288,7 +274,7 @@ export default {
         }
       }).then(res => {
         this.cityData = res.data.data;
-        // console.log(this.cityData, "侧栏热门城市列表数据");
+        console.log(this.cityData, "侧栏热门城市列表数据");
       });
     },
     //获取推荐文章数据
@@ -301,13 +287,13 @@ export default {
         }
       }).then(res => {
         this.recomdata = res.data.data;
-        // console.log(this.recomdata, "推荐文章数据");
+        console.log(this.recomdata, "推荐文章数据");
       });
     }
   },
   watch: {
     // 把val传过去搜索框
-    search: function (val) {
+    search: function(val) {
       // console.log(val, "监听搜索内容");
       // 如果搜索内容为空,不打开搜索框,获取本地接口数据;如果有输入内容,获取线上100条数据
       if (val == "") {
@@ -335,6 +321,7 @@ export default {
 </script>
 
 <style scoped lang="less">
+
 .aside {
   width: 700px;
   height: fit-content;

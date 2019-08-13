@@ -33,13 +33,13 @@
           <el-col :span="6">
             <p>住宿类型</p>
             <el-select
-              v-model="hotelStyle"
+              v-model="hotelstyle"
               multiple
               collapse-tags
               style="margin-left: 20px;"
               placeholder="不限"
               class="clearborder"
-              @change="handleStyle"
+              @change="handlestyle"
             >
               <el-option
                 v-for="(item,index) in hotelSelect.types"
@@ -105,7 +105,7 @@ export default {
       // 选定后，双向绑定保存的数据
       price: 4000,
       hotelStar: '',
-      hotelStyle: '',
+      hotelstyle: '',
       hotelServe: '',
       hotelBrand: '',
       // 获取酒店选项，保存的数据
@@ -142,8 +142,8 @@ export default {
       const newArr = this.Info.filter(item => {
         let pass = true;
         val.forEach(v => {
-          if (item.hotellevel == []) {
-            retrun
+          if (item.hotellevel == null) {
+            return
           }
           // 满足每个数据的值和过滤条件的值相等
           if (item.hotellevel.name !== v) {
@@ -156,7 +156,7 @@ export default {
 
     },
     // 筛选酒店类型
-    handleStyle(val) {
+    handlestyle(val) {
       //  val是数组
       const newArr = this.Info.filter(item => {
         let pass = true;
@@ -172,7 +172,7 @@ export default {
 
 
     },
-    // 筛选酒店服务
+    // 筛选酒店设施
     handleAssets(val) {
       const newArr = this.Info.filter(item => {
         let pass = true;
