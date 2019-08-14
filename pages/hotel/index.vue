@@ -53,9 +53,9 @@ export default {
     }
   },
   methods: {
-    //  通过事件接收addressShow下来的数据
+    //  通过预定需求RequireSelect组件下来的数据
     getCityInfo(item) {
-      console.log(item)
+      // console.log(item)
       this.CityInfo = item
     },
     // 获取筛选后的数据

@@ -80,15 +80,15 @@ export default {
     // 显示条数改变
     sizechange(size) {
       this.page._limit = size;
-      this.gcomments();
+      this.getcomments();
     },
     // 当前页码改变
     pagechange(pagenum) {
       this.page._start = pagenum;
-      this.gcomments();
+      this.getcomments();
     },
     // 获取评论
-    gcomments() {
+    getcomments() {
       let params = { ...this.page };
       params._start = params._start - 1;
       this.$axios({
@@ -131,14 +131,14 @@ export default {
       if (n === "OK") {
         this.$emit("success", "");
         this.page._start = 1;
-        this.gcomments();
+        this.getcomments();
       }
     }
   },
   // 钩子函数
   mounted() {
     this.page.post = this.$route.query.id;
-    this.gcomments();
+    this.getcomments();
   },
   components: {
     dlitem

@@ -25,17 +25,21 @@
         </div>
         <!-- tab栏对应的内容 -->
         <div class="tab-content">
-          <!-- 风景 -->       
-          <el-row class="view" v-if='current===0'
-          v-infinite-scroll="load" style="overflow:auto">
-            <ul class='view-ul'>
-              <li type='flex' justify='space-between' class='view-list'
-              v-for='(item,index) in data.scenic' :key='index'>
+          <!-- 风景 -->
+          <span class="view" v-if="current===0" v-infinite-scroll="load" style="overflow:auto">
+            <ul class="view-ul">
+              <li
+                type="flex"
+                justify="space-between"
+                class="view-list"
+                v-for="(item,index) in data.scenic||[]"
+                :key="index"
+              >
                 <span class="view-name">{{item.name}}</span>
                 <span class="view-distance">{{item.province}}</span>
               </li>
             </ul>
-          </el-row>
+          </span>
           <!-- <el-row class="transport" v-if='current===1'>
             <ol>
               <li>
@@ -43,7 +47,7 @@
                 <span class="transport-distance">0.09公里</span>
               </li>
             </ol>
-          </el-row> -->
+          </el-row>-->
         </div>
       </div>
     </div>
@@ -53,11 +57,11 @@
 <script>
 export default {
   props: {
-    data:{
-      type:Object,
-      defalut:{
-        scenic:[],
-        location:{}
+    data: {
+      type: Object,
+      defalut: {
+        scenic: [],
+        location: {}
       }
     }
   },
@@ -82,7 +86,7 @@ export default {
   },
   mounted() {
     // 再执行加载这里面的
-    window.onLoad = function() {
+    window.onLoad = function () {
       // 第一个参数为放地图的容器
       // 第二个参数为给地图设置中心点、级别、显示模式、自定义样式等属性
       var map = new AMap.Map("container", {
@@ -109,12 +113,12 @@ export default {
     document.head.appendChild(jsapi);
   },
   methods: {
-    load(){},
+    load() { },
     //  点击切换栏头部触发
     handleClick(index) {
-      if(index===1){
-        this.$alert('暂时不支持交通显示功能','提示',{
-          type:'warning'
+      if (index === 1) {
+        this.$alert('暂时不支持交通显示功能', '提示', {
+          type: 'warning'
         })
       }
       this.current = index;
@@ -142,7 +146,7 @@ export default {
       height: 360px;
     }
     .map-tab {
-      margin-left:10px;
+      margin-left: 10px;
       .tab-header {
         border-bottom: 2px solid #ddd;
       }
@@ -182,20 +186,18 @@ export default {
   height: 300px;
 }
 .view-list {
-  display:flex;
-  
-  padding:0 20px 20px 10px;
-  overflow:auto;
-  justify-content:space-between;
+  display: flex;
+
+  padding: 0 20px 20px 10px;
+  overflow: auto;
+  justify-content: space-between;
 }
 .view-name {
- 
-  font-size:14px;
-  color:#666;
+  font-size: 14px;
+  color: #666;
 }
-.view-distance{
- 
-  font-size:14px;
-  color:#666;
+.view-distance {
+  font-size: 14px;
+  color: #666;
 }
 </style>

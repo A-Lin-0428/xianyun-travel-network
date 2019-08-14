@@ -14,7 +14,9 @@
         <div class="hotelTitle">
           <h4>{{hotelList.name}}</h4>
           <span class="hotellevel">
-            <i class="iconfont iconhuangguan" v-for="(item,index) in hotelLevel" :key="index"></i>
+            <i class="iconfont iconhuangguan"></i>
+            <i class="iconfont iconhuangguan"></i>
+            <i class="iconfont iconhuangguan"></i>
           </span>
         </div>
 
@@ -81,7 +83,7 @@ export default {
       // 面包屑列表
       crumbList: [],
       // 酒店等级
-      hotelLevel: []
+      // hotelLevel: {}
     };
   },
   mounted() {
@@ -89,21 +91,21 @@ export default {
     this.id = location.href.match(/(\w+)\.htm/)[1]
     // console.log(this.id)
     this.$axios({
-      url: "http://157.122.54.189:9095/hotels",
+      url: "/hotels",
       params: { id: this.id }
     }).then(res => {
-      // console.log(res);
+      console.log(res);
       this.hotelList = res.data.data[0];
-      this.hotelLevel = this.hotelList.hotellevel.level;
-      // 返回信息为字符串,需换成数组
+      // this.hotelLevel = res.data.data[0].hotellevel.level;
+      // // 返回信息为字符串,需换成数组
       this.crumbList = res.data.data[0].breadcrumb.split(">");
-
+      // console.log(this.crumbList)
       // 处理酒店评分数据
-      this.list.pc_environment = this.hotelList.scores.environment * 10;
-      this.list.pc_product = this.hotelList.scores.product * 10;
-      this.list.pc_service = this.hotelList.scores.service * 10;
+      this.list.pc_environment = res.data.data[0].scores.environment * 10;
+      this.list.pc_product = res.data.data[0].scores.product * 10;
+      this.list.pc_service = res.data.data[0].scores.service * 10;
       // 赋值给list
-      this.list.hotelList = this.hotelList;
+      this.list.hotelList = res.data.data[0];
     });
   }
 };

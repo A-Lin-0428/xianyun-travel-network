@@ -28,7 +28,7 @@
     <el-row class="brand pad">
       <el-col :span="4">品牌信息</el-col>
       <el-col :span="20">
-        <span>{{data.hotelbrand.name||'-'}}</span>
+        <span>{{data.hotelbrand!==null?data.hotelbrand.name:'-'}}</span>
       </el-col>
     </el-row>
   </div>

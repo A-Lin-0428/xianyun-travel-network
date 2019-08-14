@@ -3,7 +3,7 @@
     <p class="title" ref="title">评论</p>
     <!-- 回复按钮 -->
     <el-tag
-      v-if="ryuser.id"
+      v-if="comuser.id"
       class="replybtn"
       :disable-transitions="true"
       size="medium"
@@ -11,7 +11,7 @@
       closable
       type="info"
     >
-      <span>回复 @{{ryuser.nickname}}</span>
+      <span>回复 @{{comuser.nickname}}</span>
     </el-tag>
     <!-- 文本域 -->
     <el-input
@@ -57,7 +57,7 @@ export default {
   },
   data() {
     return {
-      ryuser: {},
+      comuser: {},
       // 回复按钮状态
       replybtnstate: false,
       // 图片上传请求头
@@ -74,7 +74,7 @@ export default {
     // 取消回复
     cancelreply() {
       this.replybtnstate = false;
-      this.ryuser = {};
+      this.comuser = {};
     },
     // 上传成功
     upsuccess() {
@@ -88,7 +88,7 @@ export default {
         return this.$message.warning("内容不能为空");
       }
       // 判断是否回复
-      if (this.ryuser.id) this.form.follow = this.ryuser.ryid;
+      if (this.comuser.id) this.form.follow = this.comuser.ryid;
       this.form.post = this.$route.query.id;
       var data = this.form;
       // 发送请求
@@ -134,7 +134,7 @@ export default {
       deep: true,
       handler(n, o) {
         if (!n.id) return;
-        this.ryuser = n;
+        this.comuser = n;
         this.$emit("gryuserinfo", "OK");
         this.replybtnstate = true;
         this.commentposition();

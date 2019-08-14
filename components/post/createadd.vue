@@ -5,23 +5,15 @@
       <p>分享你的个人游记,让更多人看到你哦！</p>
     </div>
     <el-row>
-      <el-input v-model="input" placeholder="请输入标题" class="List"></el-input>
+      <el-input v-model="addForm.title" placeholder="请输入标题" class="List"></el-input>
       <div class="scntainers" xmlns:v-quill="富文本编辑器">
-        <div
-          class="quill-editor"
-          :content="content"
-          @change="onEditorChange($event)"
-          @blur="onEditorBlur($event)"
-          @focus="onEditorFocus($event)"
-          @ready="onEditorReady($event)"
-          v-quill:myQuillEditor="editorOption"
-        ></div>
+        <div class="quill-editor" :content="addForm.content" v-quill:myQuillEditor="editorOption"></div>
       </div>
       <div class="el-form-item__content">
         <div data-v-a7cc81fa class="el-form-item">
           <label class="el-form-item__label">选择城市</label>
           <div class="el-form-item__content">
-            <div
+            <!-- <div
               data-v-a7cc81fa
               aria-haspopup="listbox"
               role="combobox"
@@ -30,36 +22,26 @@
               aria-expanded="true"
             >
               <div class="el-input">
-                <!---->
-                <input
-                  type="text"
-                  placeholder="请搜索游玩城市"
-                  fetchsuggestions="function () { [native code] }"
-                  triggeronfocus="true"
-                  debounce="300"
-                  placement="bottom-start"
-                  popperappendtobody="true"
-                  class="el-input__inner"
-                  role="textbox"
-                  aria-autocomplete="list"
-                  aria-controls="id"
-                  aria-activedescendant="el-autocomplete-3440-item--1"
-                />
-                <!---->
-                <!---->
-                <!---->
+               
               </div>
-            </div>
+            </div>-->
             <!---->
+            <el-autocomplete
+              class="el-autocomplete"
+              v-model="destination"
+              :fetch-suggestions="queryCitySearch"
+              placeholder="请搜索游玩城市"
+              @select="handleCitySelect"
+            ></el-autocomplete>
           </div>
         </div>
         <!---->
       </div>
       <div class="right">
-        <el-button class="anl" type="primary" @click="handleanl">发布</el-button>
+        <el-button class="anl" type="primary" @click="handleLaunch">发布</el-button>
         <span>
           或者
-          <a href="javacript:;">保存到草稿</a>
+          <i @click.native="handleDraft">保存到草稿</i>
         </span>
       </div>
     </el-row>
@@ -70,8 +52,12 @@
 export default {
   data() {
     return {
-      input: '',
-      content: '',
+      destination: '',
+      addForm: {
+        city: '',
+        title: '',
+        content: '',
+      },
       editorOption: {
         // some quill options
         modules: {
@@ -100,55 +86,58 @@ export default {
       }
     }
   },
+  methods: {
+    // fetch-suggestions 当每次在输入框中输入文字的时候回触发该事件
+    queryCitySearch(value, cb) {
+      // value:输入框的值
+      // cb:回调函数，必须要调用，接收的参数格式是固定的，必须是一个数组，且数组中每一项必须
+      // 是对象
+      if (!value) {
+        cb([])
+        return
+      }
+      // 获取城市列表
+      this.$axios({
+        url: '/cities',
+        params: {
+          name: value
+        }
+      }).then(res => {
+        // console.log(res)
+        const { data } = res.data
+
+        // 循环数组，给每一项数据添加一个value属性
+        const newDate = []
+
+        data.forEach(v => {
+          v.value = v.name;
+          newDate.push(v)
+        });
+        // 设置第一个为选中的默认值
+        this.destination = newDate[0].value
+        cb(newDate)
+      })
+
+    },
+    // select 点击选中建议项时触发
+    handleCitySelect(item) {
+      // console.log(item)
+      this.city = item.id
+    },
+    //  点击保存到草稿箱
+    handleDraft() {
+
+    },
+    // 点击发布按钮
+    handleLaunch() { }
+  },
   mounted() {
     // console.log('app init, my quill insrance object is:', this.myQuillEditor)
     setTimeout(() => {
       this.content = 'i am changed'
     }, 3000)
-  },
-  methods: {
-    onEditorBlur(editor) {
-      //失去焦点事件
-      // console.log('editor blur!', editor)
-    },
-    onEditorFocus(editor) {
-      //获得焦点事件
-      // console.log('editor focus!', editor)
-    },
-    onEditorReady(editor) {
-      // console.log('editor ready!', editor)
-    },
-    onEditorChange({
-      editor,
-      html,
-      text
-    }) {
-      //内容改变事件
-      // console.log('editor change!', editor, html, text)
-      this.content = html
-    },
-    handleRemove(file, fileList) {
-      // console.log(file, fileList);
-    },
-    handlePreview(file) {
-      // console.log(file);
-    },
-    // 提交
-    handleanl() {
-      this.$axios({
-        url: '/upload',
-        method: 'GET',
-        params,
-      })
-        .then(function (res) {
-          // console.log(res);
-        })
-        .catch(function (error) {
-          // console.log(error);
-        });
-    }
-
   }
+
 }
 </script>
 
@@ -203,9 +192,13 @@ export default {
       padding: 9px 15px;
     }
 
-    a {
+    i {
       font-size: 12px;
       color: #ff9f00;
+      cursor: pointer;
+      &:hover {
+        border-bottom: #ff9f00 1px solid;
+      }
     }
   }
 }

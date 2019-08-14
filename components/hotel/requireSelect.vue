@@ -105,8 +105,11 @@ export default {
           v.value = v.name;
           newDate.push(v)
         });
+        // 设置第一个为选中的默认值
+        this.destination = newDate[0].value
         cb(newDate)
       })
+
     },
     // select 点击选中建议项时触发
     handleCitySelect(item) {
