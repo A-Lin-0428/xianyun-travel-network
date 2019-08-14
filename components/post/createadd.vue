@@ -8,6 +8,7 @@
       <el-input v-model="addForm.title" placeholder="请输入标题" class="List"></el-input>
       <div class="scntainers" xmlns:v-quill="富文本编辑器">
         <div class="quill-editor" :content="addForm.content" v-quill:myQuillEditor="editorOption"></div>
+        <!-- <quill-editor v-model="addForm.content" v-quill:myQuillEditor="editorOption"></quill-editor> -->
       </div>
       <div class="el-form-item__content">
         <div data-v-a7cc81fa class="el-form-item">
@@ -41,7 +42,7 @@
         <el-button class="anl" type="primary" @click="handleLaunch">发布</el-button>
         <span>
           或者
-          <i @click.native="handleDraft">保存到草稿</i>
+          <i @click="handleDraft">保存到草稿</i>
         </span>
       </div>
     </el-row>
@@ -49,15 +50,20 @@
 </template>
 
 <script>
+// 引入moment
+import moment from "moment";
 export default {
   data() {
     return {
       destination: '',
+      // 存储表单信息
       addForm: {
         city: '',
         title: '',
         content: '',
       },
+      // 信息提交
+      submitForm: {},
       editorOption: {
         // some quill options
         modules: {
@@ -122,11 +128,16 @@ export default {
     // select 点击选中建议项时触发
     handleCitySelect(item) {
       // console.log(item)
-      this.city = item.id
+      this.addForm.city = item.id
     },
     //  点击保存到草稿箱
     handleDraft() {
-
+      // console.log(this.addForm)
+      const newTime = moment().format("YYYY-MM-DD");
+      // console.log(newTime)
+      this.submitForm = { ...this.addForm, newTime }
+      // console.log(this.submitForm)
+      this.$emit("getAddPost", this.submitForm)
     },
     // 点击发布按钮
     handleLaunch() { }

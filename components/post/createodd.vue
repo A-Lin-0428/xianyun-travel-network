@@ -2,18 +2,25 @@
   <div class="aside">
     <div class="air-info">
       <p>草稿箱 (0)</p>
-      <p>
-        伪润体乳
-        <i class="iconfont el-icon-edit"></i>
-      </p>
-      <p>2019-08-14</p>
+      <div class="air-content" v-for="(item,index) in data" :key="index">
+        <p>
+          {{item.title}}
+          <i class="iconfont el-icon-edit"></i>
+        </p>
+        <p>{{item.newTime}}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-
+  props: {
+    data: {
+      type: Array,
+      default: []
+    }
+  }
 }
 </script>
 
@@ -27,18 +34,24 @@ export default {
     padding: 15px 0px;
     padding-left: 10px;
     p {
-      &:first-child {
-        margin-bottom: 15px;
-        font-size: 16px;
-        color: #74746b;
-      }
-      &:nth-child(2) {
-        font-size: 16px;
-        color: #000;
-      }
-      &:nth-child(3) {
-        font-size: 14px;
-        color: #9999a6;
+      font-size: 16px;
+      color: #74746b;
+    }
+    .air-content {
+      margin-top: 15px;
+      p {
+        &:first-child {
+          font-size: 16px;
+          color: #000;
+          &:hover {
+            cursor: pointer;
+            color: #ff9f00;
+          }
+        }
+        &:last-child {
+          font-size: 14px;
+          color: #9999a6;
+        }
       }
     }
   }
