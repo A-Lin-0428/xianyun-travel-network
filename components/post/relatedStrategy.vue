@@ -20,12 +20,24 @@
 export default {
   data() {
     return {
-      relateStrategy: [
-        { id: 711, img: 'https://p3-q.mafengwo.net/s13/M00/41/C4/wKgEaVyaOs2AA9IKAAj8Lg2YzaU64.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90', title: '123', time: '2019-08-12 1:06', browse: 4 },
-        { id: 713, img: 'http://157.122.54.189:9095/uploads/44850db01e1748b3b995d0e4f707ad9c.jpeg', title: '你好halo', time: '2019-08-12 1:06', browse: 7 },
-        { id: 714, img: 'http://b3-q.mafengwo.net/s13/M00/FF/47/wKgEaVzMTOCAHX9_AAnidFWU9K466.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90', title: '天气好', time: '2019-08-12 1:06', browse: 4 },
-        { id: 715, img: 'http://p4-q.mafengwo.net/s13/M00/02/39/wKgEaVzMTgKALFi5AAaKsyezLBE34.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90', title: '好空调，格力造', time: '2019-08-12 1:06', browse: 4 }
-      ]
+      // relateStrategy: [
+      //   { id: 711, img: 'https://p3-q.mafengwo.net/s13/M00/41/C4/wKgEaVyaOs2AA9IKAAj8Lg2YzaU64.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90', title: '123', time: '2019-08-12 1:06', browse: 4 },
+      //   { id: 713, img: 'http://157.122.54.189:9095/uploads/44850db01e1748b3b995d0e4f707ad9c.jpeg', title: '你好halo', time: '2019-08-12 1:06', browse: 7 },
+      //   { id: 714, img: 'http://b3-q.mafengwo.net/s13/M00/FF/47/wKgEaVzMTOCAHX9_AAnidFWU9K466.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90', title: '天气好', time: '2019-08-12 1:06', browse: 4 },
+      //   { id: 715, img: 'http://p4-q.mafengwo.net/s13/M00/02/39/wKgEaVzMTgKALFi5AAaKsyezLBE34.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90', title: '好空调，格力造', time: '2019-08-12 1:06', browse: 4 }
+      // ]
+      relateStrategy:[]
+    }
+  },
+  methods:{
+    getrelateStrategy(){
+      this.$axios({
+        url:"/posts/recommend",
+      }).then(res=>{
+        console.log(res)
+        const { data } = res.data
+        this.relateStrategy = data 
+      })
     }
   }
 };
